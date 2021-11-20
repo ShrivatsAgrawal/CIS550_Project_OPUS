@@ -1,0 +1,10 @@
+{
+    "rds_host": "cis550-project.cpmaujgv1bce.us-east-2.rds.amazonaws.com",
+    "rds_port": "3306",
+    "rds_user": "guest",
+    "rds_password" : "w3AkpA55word",
+    "rds_db": "OPUS",
+    "server_host": "127.0.0.1",
+    "server_port":"8080"
+
+}
