@@ -20,7 +20,7 @@ async function all_jobs(req,res) {
  
 
     //sample URL = http://localhost:8080/jobs?industry=tech&jobTitle=data&jobType=intern&numEmployeesLow=100
-  
+    //sample url 2 http://localhost:8080/jobs?industry=%&jobTitle=Data&jobType=intern&numEmployeesLow=10000&ratingLow=3.5
     const industry=req.query.industry?req.query.industry : '%'
     const sector=req.query.sector?req.query.sector: '%'
     const symbol=req.query.symbol?req.query.symbol : '%'
@@ -43,7 +43,7 @@ async function all_jobs(req,res) {
         AND I.jobTitle LIKE '%${jobTitle}%'
         ORDER BY CI.companyName
         )
-        SELECT * FROM TT LIMIT 5;`
+        SELECT * FROM TT LIMIT 50;`
 
     connection.query(query_job, function (error, results, fields) {
 
@@ -230,176 +230,9 @@ return res.json({error:"Please specify the ID of the match as a query parameter.
 //            PLAYER-SPECIFIC ROUTES
 // ********************************************
 
-// Route 6 (handler)
-async function player(req, res) {
-    // TODO: TASK 7: implement and test, potentially writing your own (ungraded) tests
-if(req.query.id)
-{
-connection.query(`
-SELECT PlayerId, Name, Age, Photo, Nationality, Flag, OverallRating as Rating, Potential, Club,
-       ClubLogo, Value, Wage, InternationalReputation, Skill, JerseyNumber, ContractValidUntil,
-       Height, Weight, BestPosition, BestOverallRating, ReleaseClause,
-       NPassing, NBallControl, NAdjustedAgility, NStamina, NStrength, NPositioning,
-       GKPenalties, GKDiving, GKHandling, GKKicking, GKPositioning, GKReflexes
-       FROM Players
-    WHERE PlayerId=${req.query.id};`,function(error,results,fields)
-  {
-
-    if(error)
-    {
-      console.log(error)
-      return res.json({error:error})
-    }
-    else if(results)
-
-    {
-      if(results.length>0){
-      if(results[0]['BestPosition']== "GK")
-      {
-        ['NPassing', 'NBallControl', 'NAdjustedAgility', 'NStamina', 'NStrength', 'NPositioning'].forEach(x => delete results[0][x]);
-      }
-      else
-      {
-
-          ['GKPenalties', 'GKDiving', 'GKHandling', 'GKKicking', 'GKPositioning', 'GKReflexes'].forEach(x => delete results[0][x]);
-
-      }
-    }
-
-      return res.json({results:results})
-    }
-
-  }  );
-}
-else {
-  return res.json({error:"Please specify the ID of the player as a query parameter. [Eg. /player?id=1041]"})
-}
-    //return res.json({error: "Not implemented"})
-}
-
-
-// ********************************************
-//             SEARCH ROUTES
-// ********************************************
-
-// Route 7 (handler)
-async function search_matches(req, res) {
-    // TODO: TASK 8: implement and test, potentially writing your own (ungraded) tests
-    // IMPORTANT: in your SQL LIKE matching, use the %query% format to match the search query to substrings, not just the entire string
-    const home = req.query.Home ? req.query.Home : '%'
-    const away = req.query.Away ? req.query.Away : '%'
-    const pagesize = req.query.pagesize ? req.query.pagesize : 10
-    //console.log(req.query.page,pagesize,home,away)
-    if(req.query.page && !isNaN(req.query.page))
-    {
-      connection.query(`SELECT MatchId, Date, Time, HomeTeam as Home, AwayTeam as Away, FullTimeGoalsH as HomeGoals,
-       FullTimeGoalsA as AwayGoals
-FROM Matches
-WHERE HomeTeam LIKE '%${home}%' AND AwayTeam LIKE '%${away}%'
-ORDER BY HomeTeam, AwayTeam
-LIMIT ${((req.query.page-1)*pagesize)},${pagesize};`,function(error, results , fields)
-{
-    if(error)
-  {
-    console.log(error)
-    return res.json({error:error})
-  }
-else if(results)
-{
-return res.json({results:results})
-}});
-
-    }
-
-else
-{
-      connection.query(`SELECT MatchId, Date, Time, HomeTeam as Home, AwayTeam as Away, FullTimeGoalsH as HomeGoals,
-       FullTimeGoalsA as AwayGoals
-FROM Matches
-WHERE HomeTeam LIKE '%${home}%' AND AwayTeam LIKE '%${away}%'
-ORDER BY HomeTeam, AwayTeam;`,function(error, results , fields)
-    {if(error)
-  {
-    console.log(error)
-    return res.json({error:error})
-  }
-else if(results)
-{
-return res.json({results:results})
-}
-});
-    }
-    //return res.json({error: "Not implemented"})
-
-
-}
-
-// Route 8 (handler)
-async function search_players(req, res) {
-    // TODO: TASK 9: implement and test, potentially writing your own (ungraded) tests
-    // IMPORTANT: in your SQL LIKE matching, use the %query% format to match the search query to substrings, not just the entire string
-    const name = req.query.Name ? req.query.Name : '%'
-    const nationality = req.query.Nationality ? req.query.Nationality : '%'
-    const club =  req.query.Club ? req.query.Club : '%'
-    const ratinglow = req.query.RatingLow ? req.query.RatingLow : 0
-    const ratinghigh = req.query.RatingHigh ? req.query.RatingHigh : 100
-    const potentiallow= req.query.PotentialLow ? req.query.PotentialLow : 0
-    const potentialhigh = req.query.PotentialHigh ? req.query.PotentialHigh : 100
-    const pagesize = req.query.pagesize ? req.query.pagesize : 10
-    //console.log(req.query)
-    if(req.query.page && !isNaN(req.query.page))
-    {
-      connection.query(`SELECT PlayerId, Name, Nationality, OverallRating as Rating, Potential, Club, Value
-FROM Players
-WHERE Name LIKE '%${name}%' AND  Nationality LIKE '%${nationality}%' AND Club LIKE '%${club}%'
-  AND OverallRating BETWEEN ${ratinglow} AND ${ratinghigh} AND Potential BETWEEN ${potentiallow} AND ${potentialhigh}
-ORDER BY Name
-LIMIT ${((req.query.page-1)*pagesize)},${pagesize};`,function(error, results , fields)
-    {
-    if(error)
-    {
-    console.log(error)
-    return res.json({error:error})
-    }
-    else if(results)
-    {
-    return res.json({results:results})
-    }});
-
-    }
-
-    else
-    {
-
-      connection.query(`SELECT PlayerId, Name, Nationality, OverallRating as Rating, Potential, Club, Value
-FROM Players
-WHERE Name LIKE '%${name}%' AND  Nationality LIKE '%${nationality}%' AND Club LIKE '%${club}%'
-  AND OverallRating BETWEEN ${ratinglow} AND ${ratinghigh} AND Potential BETWEEN ${potentiallow} AND ${potentialhigh}
-ORDER BY Name;`,function(error, results , fields)
-    {if(error)
-    {
-    console.log(error)
-    return res.json({error:error})
-    }
-    else if(results)
-    {
-    return res.json({results:results})
-    }
-    });
-    }
-
-
-    //return res.json({error: "Not implemented"})
-}
 
 module.exports = {
     all_jobs,
     hello,
-    jersey,
-    all_matches,
-    all_players,
-    match,
-    player,
-    search_matches,
-    search_players
+    jersey
 }
