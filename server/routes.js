@@ -15,6 +15,14 @@ connection.connect();
 // *********************************************
 //               OPUS PROJECT ROUTES
 //**********************************************
+
+
+
+
+
+// *********************************************
+//         Main Job Search Page Route
+//**********************************************
 async function all_jobs(req, res) {
 
 
@@ -140,8 +148,7 @@ async function all_companies(req, res) {
     
     if (req.query.page && !isNaN(req.query.page)) {
         // This is the case where page is defined.
-        // The SQL schema has the attribute OverallRating, but modify it to match spec! 
-        // TODO: query and return results here:
+        
         connection.query(`WITH tmp1 AS
         (SELECT symbol,companyName
         FROM CompanyInformation
@@ -203,6 +210,7 @@ async function all_companies(req, res) {
 // ********************************************
 //            Company Info Page Route
 // ********************************************
+//sample URL : http://127.0.0.1:8080/company_info?symbol=aapl
 async function company_info(req, res) {
     var company = req.query.symbol? req.query.symbol : '%';
     connection.query(`SELECT *
@@ -261,7 +269,6 @@ module.exports = {
     company_sentiment,
     company_jobs,
     company_news,
-    
     all_companies,
     company_peer_info,
     company_info
