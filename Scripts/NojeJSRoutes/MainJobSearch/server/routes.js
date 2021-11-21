@@ -65,14 +65,14 @@ async function company_sentiment(req, res) {
     var company = req.query.symbol;
     connection.query(`WITH T1 AS (SELECT DISTINCT peerID as ID
         FROM Peers
-        WHERE symbol = '%${company}%' or peerID = '%${company}%'),
+        WHERE symbol = '${company}' or peerID = '${company}'),
         T2 AS (SELECT C.companyName, C.symbol, T1.ID
         FROM CompanyInformation C JOIN T1 ON C.symbol = T1.ID),
         T3 AS (SELECT S.sentiment, T1.ID
         FROM CompanySentiments S JOIN T1 ON S.symbol = T1.ID),
         T4 AS (SELECT 'Average of peers' AS companyName, 'AVG' AS symbol, AVG(S.sentiment) as sentiment
         FROM CompanySentiments S JOIN T1 ON S.symbol = T1.ID
-        WHERE T1.ID != '%${company}%')
+        WHERE T1.ID != '${company}')
         SELECT * FROM T4
         UNION ALL
         SELECT T2.companyName, T2.symbol, T3.sentiment
@@ -90,7 +90,7 @@ async function company_jobs(req, res) {
     var company = req.query.symbol;
     connection.query(`WITH T1 AS (SELECT DISTINCT peerID
         FROM Peers
-        WHERE symbol = '%${company}%' OR peerID = '%${company}%')
+        WHERE symbol = '${company}' OR peerID = '${company}')
         SELECT *
         FROM IndeedJobs IJ JOIN T1 ON IJ.companySymbol = T1.peerID
         ORDER BY postingDate DESC;`, function (error, results, fields) {
@@ -107,7 +107,7 @@ async function company_news(req, res) {
     var company = req.query.symbol;
     connection.query(`WITH T1 AS (SELECT DISTINCT peerID
         FROM Peers
-        WHERE symbol = '%${company}%' or peerID = '%${company}%')
+        WHERE symbol = '${company}' or peerID = '${company}')
         SELECT *
         FROM CompanyNews CN JOIN T1 ON CN.symbol = T1.peerID
         ORDER BY publishedDate DESC;`, function (error, results, fields) {
