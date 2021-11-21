@@ -81,11 +81,9 @@ async function company_sentiment(req, res) {
             console.log(error)
             res.json({ error: error })
         } else if (results) {
-            out.push(results)
+            res.json({results: results});
         }
     });
-
-    res.json({results: out});
 }
 
 async function company_jobs(req, res) {
