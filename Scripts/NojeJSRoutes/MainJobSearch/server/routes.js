@@ -91,7 +91,7 @@ async function company_sentiment(req, res) {
 }
 
 async function company_jobs(req, res) {
-    var company = req.query.symbol : '%';
+    var company = req.query.symbol?req.query.symbol : '%';
     if (req.query.page && !isNaN(req.query.page)) {
         const page = req.query.page;
         const pagesize = req.query.pagesize ? req.query.pagesize : 10;
@@ -145,7 +145,7 @@ async function company_jobs(req, res) {
 }
 
 async function company_news(req, res) {
-    var company = req.params.symbol : '%';
+    var company = req.params.symbol? req.params.symbol: '%';
     if (req.query.page && !isNaN(req.query.page)) {
         const page = req.query.page;
         const pagesize = req.query.pagesize ? req.query.pagesize : 10;
@@ -193,8 +193,140 @@ async function company_news(req, res) {
 
 
 // ********************************************
-//            SIMPLE ROUTE EXAMPLE
+//            SEARCH Page Route
 // ********************************************
+async function all_companies(req, res) {
+    //sample URL = http://localhost:8080//company_all?cmpName=AAPL&numEmployeesLow=10&numEmployeesHigh=100000&mktcapLow=0&sentiLow=0&sentiHigh=1&jobNum=4
+    //sample url 2 http://localhost:8080/jobs?industry=%&jobTitle=Data&jobType=intern&numEmployeesLow=10000&ratingLow=3.5
+    const page= req.query.page
+    const pagesize=req.query.pagesize ? req.query.pagesize : 10
+    const offset= (page-1)*pagesize
+    const cmpName = req.query.companyName ? req.query.companyName : '%'
+    const numEmployeesLow = req.query.numEmployeesLow ? req.query.numEmployeesLow : 0
+    const numEmployeesHigh = req.query.numEmployeesHigh ? req.query.numEmployeesHigh : 2300000
+    const mktcapLow = req.query.mktcapLow ? req.query.mktcapLow : -8057500200000
+    const mktcapHigh = req.query.mktcapHigh ? req.query.mktcapHigh : 9223369800000000000
+    const sentiLow = req.query.sentiLow ? req.query.sentiLow : 0
+    const sentiHigh = req.query.sentiHigh ? req.query.sentiHigh : 1
+    const jobNum = req.query.jobNum ? req.query.jobNum : 5
+    
+    if (req.query.page && !isNaN(req.query.page)) {
+        // This is the case where page is defined.
+        // The SQL schema has the attribute OverallRating, but modify it to match spec! 
+        // TODO: query and return results here:
+        connection.query(`WITH tmp1 AS
+        (SELECT symbol,companyName
+        FROM CompanyInformation
+        WHERE companyName LIKE '%${cmpName}%' and
+        fullTimeEmployees BETWEEN ${numEmployeesLow} AND ${numEmployeesHigh}
+        AND mktCap BETWEEN ${mktcapLow} AND ${mktcapHigh}),
+        tmp2 AS (SELECT s.symbol, tmp1.companyName
+        FROM CompanySentiments s
+        JOIN tmp1
+        ON tmp1.symbol= s.symbol
+        WHERE sentiment BETWEEN ${sentiLow} AND ${sentiHigh})
+        SELECT *, COUNT(jobLink) as JobCount
+        FROM IndeedJobs i
+        JOIN tmp2
+        ON tmp2.symbol=i.companySymbol
+        GROUP BY i.companySymbol
+        HAVING COUNT(jobLink)> ${jobNum}
+        LIMIT ${pagesize} OFFSET ${offset};`, function (error, results, fields) {
+
+            if (error) {
+                console.log(error)
+                res.json({ error: error })
+            } else if (results) {
+                res.json({ results: results })
+            }
+        });
+   
+    } else {
+        
+        connection.query(`WITH tmp1 AS
+        (SELECT symbol,companyName
+        FROM CompanyInformation
+        WHERE companyName LIKE '%${cmpName}%' and
+        fullTimeEmployees BETWEEN ${numEmployeesLow} AND ${numEmployeesHigh}
+        AND mktCap BETWEEN ${mktcapLow} AND ${mktcapHigh}),
+        tmp2 AS (SELECT s.symbol, tmp1.companyName
+        FROM CompanySentiments s
+        JOIN tmp1
+        ON tmp1.symbol= s.symbol
+        WHERE sentiment BETWEEN ${sentiLow} AND ${sentiHigh})
+        SELECT *, COUNT(jobLink) as JobCount
+        FROM IndeedJobs i
+        JOIN tmp2
+        ON tmp2.symbol=i.companySymbol
+        GROUP BY i.companySymbol
+        HAVING COUNT(jobLink)> ${jobNum}`, function (error, results, fields) {
+
+            if (error) {
+                console.log(error)
+                res.json({ error: error })
+            } else if (results) {
+                res.json({ results: results })
+            }
+        });
+    }
+
+}
+
+// ********************************************
+//            Company Info Page Route
+// ********************************************
+async function company_info(req, res) {
+    var company = req.query.symbol? req.query.symbol : '%';
+    connection.query(`SELECT *
+    FROM CompanyInformation
+    WHERE symbol LIKE '%${company}%';` ,function (error, results, fields) {
+        if (error) {
+            console.log(error)
+            res.json({ error: error })
+        } else if (results) {
+            res.json({ results: results })
+        }
+    });
+}
+
+// ********************************************
+//            Company Peer Info Page Route
+// ********************************************
+async function company_peer_info(req, res) {
+    //
+    //var company = req.query.symbol;
+    var company = req.query.symbol?req.query.symbol : '%';
+    const page= req.query.page
+    const pagesize=req.query.pagesize ? req.query.pagesize : 10
+    const offset= (page-1)*pagesize
+    if (req.query.page && !isNaN(req.query.page)) {
+        // This is the case where page is defined.
+        // The SQL schema has the attribute OverallRating, but modify it to match spec! 
+        // TODO: query and return results here:
+        connection.query(`with t as (select distinct peerID from Peers where symbol like '%${company}%')
+        select companyName, peerID from CompanyInformation ci JOIN t on ci.symbol=t.peerID LIMIT ${pagesize} OFFSET ${offset};`, function (error, results, fields) {
+            if (error) {
+                console.log(error)
+                res.json({ error: error })
+            } else if (results) {
+                res.json({ results: results })
+            }
+        });
+   
+    } else {
+        // we have implemented this for you to see how to return results by querying the database
+        connection.query(`with t as (select distinct peerID from Peers where symbol like '%${company}%')
+        select companyName, peerID from CompanyInformation ci JOIN t on ci.symbol=t.peerID`, function (error, results, fields) {
+
+            if (error) {
+                console.log(error)
+                res.json({ error: error })
+            } else if (results) {
+                res.json({ results: results })
+            }
+        });
+    }
+}
 
 
 module.exports = {
@@ -202,5 +334,8 @@ module.exports = {
     company_sentiment,
     company_jobs,
     company_news,
+    company_info,
+    company_peer_info,
+    all_companies
    
 }
