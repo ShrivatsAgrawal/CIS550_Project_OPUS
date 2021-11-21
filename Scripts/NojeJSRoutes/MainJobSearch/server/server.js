@@ -12,9 +12,9 @@ const app = express();
 app.get('/jobs',routes.all_jobs)
 
 
-app.get('/company_news', routes.company_news)
-app.get('/company_sentiment', routes.company_sentiment)
-app.get('/company_jobs', routes.company_jobs)
+app.get('/company_news/:symbol', routes.company_news)
+app.get('/company_sentiment/:symbol', routes.company_sentiment)
+app.get('/company_jobs/:symbol', routes.company_jobs)
 
 
 
