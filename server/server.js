@@ -10,21 +10,12 @@ const app = express();
 
 //New App Route
 app.get('/jobs',routes.all_jobs)
-// Route 1 - register as GET 
-app.get('/hello', routes.hello)
-
 app.get('/company_news', routes.company_news)
 app.get('/company_sentiment', routes.company_sentiment)
 app.get('/company_jobs', routes.company_jobs)
 app.get('/company_all', routes.all_companies)
 app.get('/company_peers', routes.company_peer_info)
 app.get('/company_info', routes.company_info)
-
-
-// Route 2 - register as GET 
-app.get('/jersey/:choice', routes.jersey)
-
-
 
 
 
