@@ -107,7 +107,7 @@ async function company_news(req, res) {
     var company = req.query.symbol;
     connection.query(`WITH T1 AS (SELECT DISTINCT peerID
         FROM Peers
-        WHERE symbol = '%${company}%' or peerID = '%${company}%)
+        WHERE symbol = '%${company}%' or peerID = '%${company}%')
         SELECT *
         FROM CompanyNews CN JOIN T1 ON CN.symbol = T1.peerID
         ORDER BY publishedDate DESC;`, function (error, results, fields) {
