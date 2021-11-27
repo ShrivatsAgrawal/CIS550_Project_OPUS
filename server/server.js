@@ -10,9 +10,9 @@ const app = express();
 
 //New App Route
 app.get('/jobs',routes.all_jobs)
-app.get('/company_news', routes.company_news)
-app.get('/company_sentiment', routes.company_sentiment)
-app.get('/company_jobs', routes.company_jobs)
+app.get('/company/news/:symbol', routes.company_news)
+app.get('/company/sentiment/:symbol', routes.company_sentiment)
+app.get('/company/jobs/:symbol', routes.company_jobs)
 app.get('/company_all', routes.all_companies)
 app.get('/company_peers', routes.company_peer_info)
 app.get('/company_info', routes.company_info)
