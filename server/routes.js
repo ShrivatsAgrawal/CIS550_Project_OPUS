@@ -99,7 +99,7 @@ async function company_sentiment(req, res) {
 }
 
 async function company_jobs(req, res) {
-    var company = req.query.symbol?req.query.symbol : '%';
+    var company = req.params.symbol?req.params.symbol : '%';
     if (req.query.page && !isNaN(req.query.page)) {
         const page = req.query.page;
         const pagesize = req.query.pagesize ? req.query.pagesize : 10;
