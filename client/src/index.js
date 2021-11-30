@@ -6,32 +6,29 @@ import {
 	Switch
 } from 'react-router-dom';
 
-import HomePage from './pages/HomePage';
-import PlayersPage from './pages/PlayersPage';
 import 'antd/dist/antd.css';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css"
-import MatchesPage from './pages/MatchesPage';
+
+import CompanyJobsPage from './pages/CompanyJobsPage';
+import CompanyInfoPage from './pages/CompanyInfoPage';
 
 ReactDOM.render(
   <div>
     <Router>
       <Switch>
-        <Route exact
-							path="/"
+        
+		<Route exact
+							path="/company/jobs/:symbol"
 							render={() => (
-								<HomePage />
+								<CompanyJobsPage />
 							)}/>
-        <Route exact
-							path="/players"
+
+		<Route exact
+							path="/company/info/:symbol"
 							render={() => (
-								<PlayersPage />
-							)}/>
-        <Route exact
-							path="/matches"
-							render={() => (
-								<MatchesPage />
+								<CompanyInfoPage />
 							)}/>
       </Switch>
     </Router>

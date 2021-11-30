@@ -7,8 +7,7 @@ const getCompanyNews = async (page, pagesize, symbol) => {
     return res.json()
 }
 
-
-const getCompanyInfo = async (page, pagesize, symbol) => {
+const getCompanyInfo = async (symbol) => {
     var res = await fetch(`http://${config.server_host}:${config.server_port}/company/${symbol}`, {
         method: 'GET',
     })
@@ -67,14 +66,9 @@ const getPlayerSearch = async (name, nationality, club, rating_high, rating_low,
 
 */
 
-/*export {
-    getAllMatches,
-    getAllPlayers,
-    getMatch,
-    getPlayer,
-    getMatchSearch,
-    getPlayerSearch
-}*/
+
 export {
-    getCompanyNews
+    getCompanyNews,
+    getCompanyInfo,
+    getCompanyJobs
 }
