@@ -39,6 +39,12 @@ ReactDOM.render(
 							render={() => (
 								<CompanyJobsPage />
 							)}/>
+
+		<Route exact
+							path="/company/:symbol"
+							render={() => (
+								<CompanyInfoPage />
+							)}/>
       </Switch>
     </Router>
   </div>,
