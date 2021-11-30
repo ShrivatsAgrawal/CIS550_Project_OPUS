@@ -285,7 +285,7 @@ async function all_companies(req, res) {
 // ********************************************
 //sample URL : http://127.0.0.1:8080/company_info?symbol=aapl
 async function company_info(req, res) {
-    var company = req.query.symbol? req.query.symbol : '%';
+    var company = req.params.symbol? req.params.symbol : '%';
     connection.query(`SELECT *
     FROM CompanyInformation
     WHERE symbol LIKE '%${company}%';` ,function (error, results, fields) {
@@ -302,7 +302,7 @@ async function company_info(req, res) {
 //            Company Peer Info Page Route
 // ********************************************
 async function company_peer_info(req, res) {
-    var company = req.query.symbol;
+    var company = req.params.symbol;
     const page= req.query.page
     const pagesize=req.query.pagesize ? req.query.pagesize : 10
     const offset= (page-1)*pagesize

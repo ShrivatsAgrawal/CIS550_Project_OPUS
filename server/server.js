@@ -14,8 +14,8 @@ app.get('/company/news/:symbol', routes.company_news)
 app.get('/company/sentiment/:symbol', routes.company_sentiment)
 app.get('/company/jobs/:symbol', routes.company_jobs)
 app.get('/search/company', routes.all_companies)
-app.get('/company/peers', routes.company_peer_info)
-app.get('/company/info', routes.company_info)
+app.get('/company/peers/:symbol', routes.company_peer_info)
+app.get('/company/info/:symbol', routes.company_info)
 
 
 
