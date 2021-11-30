@@ -13,6 +13,7 @@ import 'antd/dist/antd.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css"
 import MatchesPage from './pages/MatchesPage';
+import CompanyJobsPage from './pages/CompanyJobsPage';
 
 ReactDOM.render(
   <div>
@@ -32,6 +33,11 @@ ReactDOM.render(
 							path="/matches"
 							render={() => (
 								<MatchesPage />
+							)}/>
+		<Route exact
+							path="/company/jobs/:symbol"
+							render={() => (
+								<CompanyJobsPage />
 							)}/>
       </Switch>
     </Router>
