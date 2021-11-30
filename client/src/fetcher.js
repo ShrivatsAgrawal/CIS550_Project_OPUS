@@ -1,7 +1,29 @@
 import config from './config.json'
 
+const getCompanyNews = async (page, pagesize, symbol) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/company/news/${symbol}?page=${page}&pagesize=${pagesize}`, {
+        method: 'GET',
+    })
+    return res.json()
+}
+
+const getCompanyInfo = async (page, pagesize, symbol) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/company/${symbol}`, {
+        method: 'GET',
+    })
+    return res.json()
+}
+
+const getCompanyJobs = async (page, pagesize, symbol) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/company/jobs/${symbol}?page=${page}&pagesize=${pagesize}`, {
+        method: 'GET',
+    })
+    return res.json()
+}
+
+/*
 const getAllMatches = async (page, pagesize, league) => {
-    var res = await fetch(`http://${config.server_host}:${config.server_port}/matches/${league}?page=${page}&pagesize=${pagesize}`, {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/company/${league}?page=${page}&pagesize=${pagesize}`, {
         method: 'GET',
     })
     return res.json()
@@ -42,7 +64,7 @@ const getPlayerSearch = async (name, nationality, club, rating_high, rating_low,
     return res.json()
 }
 
-
+*/
 
 
 
