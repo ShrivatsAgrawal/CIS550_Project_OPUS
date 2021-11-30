@@ -27,7 +27,7 @@ ReactDOM.render(
 							}/>
 
 		<Route exact
-							path="/company/info/:symbol"
+							path="/company/info/"
 							render={() => (
 								<CompanyInfoPage />
 							)}/>
