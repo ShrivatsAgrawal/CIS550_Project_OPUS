@@ -70,64 +70,134 @@ async function all_jobs(req, res) {
 }
 
 async function company_sentiment(req, res) {
-    var company = req.query.symbol;
-    connection.query(`WITH T1 AS (SELECT DISTINCT peerID as ID
-        FROM Peers
-        WHERE symbol = '%${company}%' or peerID = '%${company}%'),
-        T2 AS (SELECT C.companyName, C.symbol, T1.ID
-        FROM CompanyInformation C JOIN T1 ON C.symbol = T1.ID),
-        T3 AS (SELECT S.sentiment, T1.ID
-        FROM CompanySentiments S JOIN T1 ON S.symbol = T1.ID),
-        T4 AS (SELECT 'Average of peers' AS companyName, 'AVG' AS symbol, AVG(S.sentiment) as sentiment
-        FROM CompanySentiments S JOIN T1 ON S.symbol = T1.ID
-        WHERE T1.ID != '%${company}%')
-        SELECT * FROM T4
-        UNION ALL
-        SELECT T2.companyName, T2.symbol, T3.sentiment
-        FROM T2 JOIN T3 ON T2.ID = T3.ID;`, function (error, results, fields) {
-        if (error) {
-            console.log(error)
-            res.json({ error: error })
-        } else if (results) {
-            res.json({ results: results });
-        }
-    });
+    if (req.params.symbol) {
+        var company = req.params.symbol
+        connection.query(`WITH T1 AS (SELECT DISTINCT peerID as ID
+            FROM Peers
+            WHERE symbol = '${company}' or peerID = '${company}'),
+            T2 AS (SELECT C.companyName, C.symbol, T1.ID
+            FROM CompanyInformation C JOIN T1 ON C.symbol = T1.ID),
+            T3 AS (SELECT S.sentiment, T1.ID
+            FROM CompanySentiments S JOIN T1 ON S.symbol = T1.ID),
+            T4 AS (SELECT 'Average of peers' AS companyName, 'AVG' AS symbol, AVG(S.sentiment) as sentiment
+            FROM CompanySentiments S JOIN T1 ON S.symbol = T1.ID
+            WHERE T1.ID != '${company}')
+            SELECT * FROM T4
+            UNION ALL
+            SELECT T2.companyName, T2.symbol, T3.sentiment
+            FROM T2 JOIN T3 ON T2.ID = T3.ID;`, function (error, results, fields) {
+            if (error) {
+                console.log(error)
+                res.json({ error: error })
+            } else if (results) {
+                res.json({results: results});
+            }
+        });
+    } else {
+        res.json("no company");
+    }
 }
 
 async function company_jobs(req, res) {
-    var company = req.query.symbol;
-    connection.query(`WITH T1 AS (SELECT DISTINCT peerID
-        FROM Peers
-        WHERE symbol = '%${company}%' OR peerID = '%${company}%')
-        SELECT *
-        FROM IndeedJobs IJ JOIN T1 ON IJ.companySymbol = T1.peerID
-        ORDER BY postingDate DESC;`, function (error, results, fields) {
-        if (error) {
-            console.log(error)
-            res.json({ error: error })
-        } else if (results) {
-            res.json({ results: results })
-        }
-    });
+    var company = req.params.symbol?req.params.symbol : '%';
+    if (req.query.page && !isNaN(req.query.page)) {
+        const page = req.query.page;
+        const pagesize = req.query.pagesize ? req.query.pagesize : 10;
+        connection.query(`WITH Temp AS (
+            WITH T1 AS (SELECT DISTINCT peerID
+            FROM Peers
+            WHERE symbol LIKE '%${company}%' OR peerID LIKE '%${company}%')
+            SELECT ROW_NUMBER() OVER (ORDER BY postingDate) AS RowNum, *
+            FROM IndeedJobs IJ JOIN T1 ON IJ.companySymbol = T1.peerID
+            ORDER BY postingDate DESC)
+            SELECT companySymbol, 
+                   searchCompany,
+                   jobType,
+                   jobCountry,
+                   searchLink,
+                   jobTitle,
+                   jobLink,
+                   jobCompany,
+                   companyLink,
+                   companyRating,
+                   jobLocation,
+                   shortDescription,
+                   postingDate,
+                   salary
+            FROM Temp
+            WHERE RowNum <= ${page} * ${pagesize} && RowNum > ${pagesize} * (${page} - 1)
+            ORDER BY PostingDate DESC`, function (error, results, fields) {
+            if (error) {
+                console.log(error)
+                res.json({ error: error })
+            } else if (results) {
+                res.json({results: results})
+            }
+        });
+    } else {
+        connection.query(`WITH T1 AS (SELECT DISTINCT peerID
+            FROM Peers
+            WHERE symbol LIKE '%${company}%' OR peerID LIKE '%${company}%')
+            SELECT *
+            FROM IndeedJobs IJ JOIN T1 ON IJ.companySymbol = T1.peerID
+            ORDER BY postingDate DESC
+            LIMIT 10;`, function (error, results, fields) {
+            if (error) {
+                console.log(error)
+                res.json({ error: error })
+            } else if (results) {
+                res.json({results: results})
+            }
+        });
+    }
 }
 
 async function company_news(req, res) {
-    var company = req.query.symbol;
-    connection.query(`WITH T1 AS (SELECT DISTINCT peerID
-        FROM Peers
-        WHERE symbol = '%${company}%' or peerID = '%${company}%')
+    var company = req.params.symbol? req.params.symbol: '%';
+    if (req.query.page && !isNaN(req.query.page)) {
+        const page = req.query.page;
+        const pagesize = req.query.pagesize ? req.query.pagesize : 10;
+        connection.query(`WITH Temp AS (
+            WITH T1 AS (SELECT DISTINCT peerID
+            FROM Peers
+            WHERE symbol LIKE '%${company}%' or peerID LIKE '%${company}%')
+            SELECT ROW_NUMBER() OVER (ORDER BY publishedDate) AS RowNum, *
+            FROM CompanyNews CN JOIN T1 ON CN.symbol = T1.peerID
+            ORDER BY publishedDate DESC)
+            SELECT symbol, 
+                   publishedDate,
+                   title,
+                   image,
+                   site,
+                   text,
+                   url
+            FROM Temp
+            WHERE RowNum <= ${page} * ${pagesize} && RowNum > ${pagesize} * (${page} - 1)
+            ORDER BY PostingDate DESC`, function (error, results, fields) {
+            if (error) {
+                console.log(error)
+                res.json({ error: error })
+            } else if (results) {
+                res.json({results: results})
+            }
+        });
+    } else {
+        connection.query(`WITH T1 AS (SELECT DISTINCT peerID
+            FROM Peers
+            WHERE symbol LIKE '%${company}%' or peerID LIKE '%${company}%')
         SELECT *
         FROM CompanyNews CN JOIN T1 ON CN.symbol = T1.peerID
-        ORDER BY publishedDate DESC;`, function (error, results, fields) {
+        ORDER BY publishedDate DESC 
+        LIMIT 10;`, function (error, results, fields) {
         if (error) {
             console.log(error)
             res.json({ error: error })
         } else if (results) {
-            res.json({ results: results })
+             res.json({results: results})
         }
     });
+    }
 }
-
 // ********************************************
 //            SEARCH Page Route
 // ********************************************
