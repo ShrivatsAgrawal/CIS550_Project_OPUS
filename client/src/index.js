@@ -20,10 +20,11 @@ ReactDOM.render(
       <Switch>
         
 		<Route exact
-							path="/company/jobs/:symbol"
+							path="/company/jobs"
 							render={() => (
 								<CompanyJobsPage />
-							)}/>
+							)
+							}/>
 
 		<Route exact
 							path="/company/info/:symbol"

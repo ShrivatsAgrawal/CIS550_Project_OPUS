@@ -103,7 +103,7 @@ async function company_jobs(req, res) {
     if (req.query.page && !isNaN(req.query.page)) {
         const page = req.query.page;
         const pagesize = req.query.pagesize ? req.query.pagesize : 10;
-        connection.query(`WITH Temp AS (
+        const queryJob=`WITH Temp AS (
             WITH T1 AS (SELECT DISTINCT peerID
             FROM Peers
             WHERE symbol LIKE '%${company}%' OR peerID LIKE '%${company}%')
@@ -126,7 +126,10 @@ async function company_jobs(req, res) {
                    salary
             FROM Temp
             WHERE RowNum <= ${page} * ${pagesize} && RowNum > ${pagesize} * (${page} - 1)
-            ORDER BY PostingDate DESC`, function (error, results, fields) {
+            ORDER BY PostingDate DESC`
+
+        const query2=`SELECT * FROM PEERS LIMIT 5;`
+        connection.query(query2, function (error, results, fields) {
             if (error) {
                 console.log(error)
                 res.json({ error: error })
@@ -211,14 +214,15 @@ async function all_companies(req, res) {
     const numEmployeesLow = req.query.numEmployeesLow ? req.query.numEmployeesLow : 0
     const numEmployeesHigh = req.query.numEmployeesHigh ? req.query.numEmployeesHigh : 8000000000
     const mktcapLow = req.query.mktcapLow ? req.query.mktcapLow : 0
-    const mktcapHigh = req.query.mktcapHigh ? req.query.mktcapHigh : 9223369800000000000
+    const mktcapHigh = req.query.mktcapHigh ? req.query.mktcapHigh : 10000000000
     const sentiLow = req.query.sentiLow ? req.query.sentiLow : 0
     const sentiHigh = req.query.sentiHigh ? req.query.sentiHigh : 1
-    const jobNum = req.query.jobNum ? req.query.jobNum : 1
+    const jobNum = req.query.jobNum ? req.query.jobNum : 5
     
     if (req.query.page && !isNaN(req.query.page)) {
         // This is the case where page is defined.
-        const query1=`WITH tmp1 AS
+        
+        connection.query(`WITH tmp1 AS
         (SELECT symbol,companyName
         FROM CompanyInformation
         WHERE companyName LIKE '${cmpName}' and
@@ -235,15 +239,12 @@ async function all_companies(req, res) {
         ON tmp2.symbol=i.companySymbol
         GROUP BY i.companySymbol
         HAVING COUNT(jobLink)> ${jobNum}
-        LIMIT ${pagesize} OFFSET ${offset};`
-        //const query2 = ``
-        connection.query(query1, function (error, results, fields) {
+        LIMIT ${pagesize} OFFSET ${offset};`, function (error, results, fields) {
 
             if (error) {
                 console.log(error)
                 res.json({ error: error })
             } else if (results) {
-                console.log(query1)
                 res.json({ results: results })
             }
         });
@@ -284,7 +285,7 @@ async function all_companies(req, res) {
 // ********************************************
 //sample URL : http://127.0.0.1:8080/company_info?symbol=aapl
 async function company_info(req, res) {
-    var company = req.params.symbol;
+    var company = req.query.symbol? req.query.symbol : '%';
     connection.query(`SELECT *
     FROM CompanyInformation
     WHERE symbol LIKE '%${company}%';` ,function (error, results, fields) {
@@ -301,7 +302,7 @@ async function company_info(req, res) {
 //            Company Peer Info Page Route
 // ********************************************
 async function company_peer_info(req, res) {
-    var company = req.params.symbol;
+    var company = req.query.symbol;
     const page= req.query.page
     const pagesize=req.query.pagesize ? req.query.pagesize : 10
     const offset= (page-1)*pagesize
@@ -310,7 +311,9 @@ async function company_peer_info(req, res) {
         // The SQL schema has the attribute OverallRating, but modify it to match spec! 
         // TODO: query and return results here:
         connection.query(`with t as (select peerID from Peers where symbol like '%${company}%')
-        select companyName, peerID from CompanyInformation ci JOIN t on ci.symbol=t.peerID LIMIT ${pagesize} OFFSET ${offset};`, function (error, results, fields) {
+        select companyName, peerID 
+        from CompanyInformation ci JOIN t on ci.symbol=t.peerID LIMIT ${pagesize} OFFSET ${offset};`
+        , function (error, results, fields) {
 
             if (error) {
                 console.log(error)
