@@ -87,7 +87,8 @@ class CompanyJobsPage extends React.Component {
 
   componentDidMount() {
     getCompanyJobs(1, 10, 'AAPL').then(res => {
-      this.setState({ companyJobResults: res.results })
+        console.log(res)
+      this.setState({ companyJobResults: res.results[0].symbol })
 })
 /*
     getAllPlayers().then(res => {

@@ -20,6 +20,7 @@ const getCompanyJobs = async (page, pagesize, symbol) => {
     var res = await fetch(`http://${config.server_host}:${config.server_port}/company/jobs/${symbol}?page=${page}&pagesize=${pagesize}`, {
         method: 'GET',
     })
+    
     return res.json()
 }
 

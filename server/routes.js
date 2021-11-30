@@ -128,7 +128,7 @@ async function company_jobs(req, res) {
             WHERE RowNum <= ${page} * ${pagesize} && RowNum > ${pagesize} * (${page} - 1)
             ORDER BY PostingDate DESC`
 
-        const query2=`SELECT * FROM PEERS LIMIT 5;`
+        const query2=`SELECT * FROM Peers LIMIT 5;`
         connection.query(query2, function (error, results, fields) {
             if (error) {
                 console.log(error)
