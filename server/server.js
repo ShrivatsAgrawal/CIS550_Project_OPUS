@@ -13,9 +13,9 @@ app.get('/jobs',routes.all_jobs)
 app.get('/company/news/:symbol', routes.company_news)
 app.get('/company/sentiment/:symbol', routes.company_sentiment)
 app.get('/company/jobs/:symbol', routes.company_jobs)
-app.get('/company_all', routes.all_companies)
-app.get('/company_peers', routes.company_peer_info)
-app.get('/company_info', routes.company_info)
+app.get('/search/company', routes.all_companies)
+app.get('/company/peers', routes.company_peer_info)
+app.get('/company/info', routes.company_info)
 
 
 
