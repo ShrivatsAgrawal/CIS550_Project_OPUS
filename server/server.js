@@ -9,10 +9,10 @@ const cors = require('cors');
 
 const app = express();
 
+
 app.use(cors({
     origin: '*'
 }));
-
 
 
 
@@ -33,3 +33,5 @@ app.listen(config.server_port, () => {
 });
 
 module.exports = app;
+
+//Test
