@@ -7,71 +7,95 @@ import {
 
 import MenuBar from '../components/MenuBar';
 import { getCompanyJobs } from '../fetcher'
+import { useParams } from 'react-router-dom';
 const { Column, ColumnGroup } = Table;
 const { Option } = Select;
 
 
-/*const companyJobColumns = [
+const companyJobColumns = [
   {
-      title: 'Name',
-      dataIndex: 'Name',
-      key: 'Name',
-      sorter: (a, b) => a.Name.localeCompare(b.Name),
-      render: (text, row) => <a href={`/players?id=${row.PlayerId}`}>{text}</a>
+      title: 'Symbol',
+      dataIndex: 'companySymbol',
+      key: 'companySymbol',
+      sorter: (a, b) => a.companySymbol.localeCompare(b.companySymbol)//,
+      //render: (text, row) => <a href={`/players?id=${row.PlayerId}`}>{text}</a>
 },
 {
-    title: 'Nationality',
-    dataIndex: 'Nationality',
-    key: 'Nationality',
-    sorter: (a, b) => a.Nationality.localeCompare(b.Nationality)
+    title: 'Name',
+    dataIndex: 'jobCompany',
+    key: 'jobCompany',
+    sorter: (a, b) => a.jobCompany.localeCompare(b.jobCompany),
+    render: (text, row) => <a href={`${row.companyLink}`}>{text}</a>
 },
 {
     title: 'Rating',
-    dataIndex: 'Rating',
-    key: 'Rating',
-    sorter: (a, b) => a.Rating - b.Rating
+    dataIndex: 'companyRating',
+    key: 'CompanyRating',
+    sorter: (a, b) => a.CompanyRating - b.CompanyRating
     
 },
-{
-  title: 'Potential',
-  dataIndex: 'Potential',
-  key: 'Potential',
-  sorter: (a, b) => a.Potential - b.Potential
-  
-},
-{
-  title: 'Club',
-  dataIndex: 'Club',
-  key: 'Club',
-  sorter: (a, b) => a.Club.localeCompare(b.Club)
-  
-},
-{
-  title: 'Value',
-  dataIndex: 'Value',
-  key: 'Value',
-  
-  
-},
 
-];*/
+{
+  title: 'Job Title',
+  dataIndex: 'jobTitle',
+  key: 'jobTitle',
+  sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
+  render: (text, row) => <a href={`${row.jobLink}`}>{text}</a>
+  
+},
+{
+  title: 'Location',
+  dataIndex: 'jobLocation',
+  key: 'jobLocation'
+},
+{
+  title: 'Job Type',
+  dataIndex: 'jobType',
+  key: 'jobType',
+  sorter: (a, b) => a.jobType.localeCompare(b.jobType)
+  
+},
+{
+  title: 'Description',
+  dataIndex: 'shortDescription',
+  key: 'shortDescription'
+  
+},
+{
+  title: 'Salary',
+  dataIndex: 'salary',
+  key: 'salary',
+  sorter: (a, b) => a.salary.localeCompare(b.salary),
+  
+},
+{
+  title: 'More Jobs',
+  dataIndex: 'searchLink',
+  key: 'searchLink',
+  render: (text, row) => <a href={`${row.searchLink}`}>{text}</a>
+  
+}
+];
 
 class CompanyJobsPage extends React.Component {
 
+  
   constructor(props) {
     super(props)
-
+    //const { symbol } = this.props.match.params;
     this.state = {
     companyJobResults: [],
     companyJobsPageNumber: 1,
-    companyJobsPageSize: 10,
-    pagination: null  
+    companyJobsPageSize: 12,
+    pagination: null 
+    //symbol : symbol
+    
 }
 
     //this.leagueOnChange = this.leagueOnChange.bind(this)
     //this.goToMatch = this.goToMatch.bind(this)
 }
-
+  
 
   /*goToMatch(matchId) {
     window.location = `/matches?id=${matchId}`
@@ -86,9 +110,11 @@ class CompanyJobsPage extends React.Component {
 }*/
 
   componentDidMount() {
-    getCompanyJobs(1, 10, 'AAPL').then(res => {
-        console.log(res)
-      this.setState({ companyJobResults: res.results[0].symbol })
+    
+    getCompanyJobs(this.state.companyJobsPageNumber, this.state.companyJobsPageSize, 'AAPL').then(res => {
+      console.log(res)
+        //console.log("Symbol:"+this.state.symbol)
+      this.setState({ companyJobResults: res.results})
 })
 /*
     getAllPlayers().then(res => {
@@ -103,8 +129,11 @@ class CompanyJobsPage extends React.Component {
 
     return (
       <div>
-          Hallelujah!
-       {this.state.companyJobResults}
+        
+       <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
+          <h3>Jobs</h3>
+          <Table dataSource={this.state.companyJobResults} columns={companyJobColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
+        </div>
       </div>
     )
   }
