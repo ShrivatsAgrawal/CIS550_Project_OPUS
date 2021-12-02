@@ -7,86 +7,44 @@ import {
 } from 'antd'
 
 import MenuBar from '../components/MenuBar';
-import { getCompanyJobs } from '../fetcher'
+import { getCompanySentiment } from '../fetcher'
 import { useParams } from 'react-router-dom';
 const { Column, ColumnGroup } = Table;
 const { Option } = Select;
 
 
-const companyJobColumns = [
+const companySentimentColumns = [
   {
       title: 'Symbol',
-      dataIndex: 'companySymbol',
-      key: 'companySymbol',
-      sorter: (a, b) => a.companySymbol.localeCompare(b.companySymbol)
+      dataIndex: 'symbol',
+      key: 'symbol',
+      sorter: (a, b) => a.symbol.localeCompare(b.symbol)
 },
 {
     title: 'Name',
-    dataIndex: 'jobCompany',
-    key: 'jobCompany',
-    sorter: (a, b) => a.jobCompany.localeCompare(b.jobCompany),
-    render: (text, row) => <a href={`${row.companyLink}`}>{text}</a>
+    dataIndex: 'companyName',
+    key: 'companyName',
+    sorter: (a, b) => a.companyName.localeCompare(b.companyName),
 },
 {
-    title: 'Rating',
-    dataIndex: 'companyRating',
-    key: 'CompanyRating',
-    sorter: (a, b) => a.CompanyRating - b.CompanyRating
+    title: 'Sentiment',
+    dataIndex: 'sentiment',
+    key: 'sentiment',
+    sorter: (a, b) => a.sentiment - b.sentiment
     
-},
-
-{
-  title: 'Job Title',
-  dataIndex: 'jobTitle',
-  key: 'jobTitle',
-  sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
-  render: (text, row) => <a href={`${row.jobLink}`}>{text}</a>
-  
-},
-{
-  title: 'Location',
-  dataIndex: 'jobLocation',
-  key: 'jobLocation'
-},
-{
-  title: 'Job Type',
-  dataIndex: 'jobType',
-  key: 'jobType',
-  sorter: (a, b) => a.jobType.localeCompare(b.jobType)
-  
-},
-{
-  title: 'Description',
-  dataIndex: 'shortDescription',
-  key: 'shortDescription'
-  
-},
-{
-  title: 'Salary',
-  dataIndex: 'salary',
-  key: 'salary',
-  sorter: (a, b) => a.salary.localeCompare(b.salary),
-  
-},
-{
-  title: 'More Jobs',
-  dataIndex: 'searchLink',
-  key: 'searchLink',
-  render: (text, row) => <a href={`${row.searchLink}`}>{text}</a>
-  
 }
 ];
 
-class CompanyJobsPage extends React.Component {
+class CompanySentimentPage extends React.Component {
 
   
   constructor(props) {
     super(props)
     //const { symbol } = this.props.match.params;
     this.state = {
-    companyJobResults: [],
-    companyJobsPageNumber: 1,
-    companyJobsPageSize: 12,
+    companySentimentResults: [],
+    companySentimentPageNumber: 1,
+    companySentimentPageSize: 12,
     pagination: null 
     
 }
@@ -94,9 +52,9 @@ class CompanyJobsPage extends React.Component {
 
   componentDidMount() {
     
-    getCompanyJobs(this.state.companyJobsPageNumber, this.state.companyJobsPageSize, 'AAPL').then(res => {
+    getCompanySentiment(this.state.companySentimentPageNumber, this.state.companySentimentPageSize, 'AAPL').then(res => {
       console.log(res)
-      this.setState({ companyJobResults: res.results})
+      this.setState({ companySentimentResults: res.results})
 })
 
 }
@@ -109,7 +67,7 @@ class CompanyJobsPage extends React.Component {
         
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
           <h3>Jobs</h3>
-          <Table dataSource={this.state.companyJobResults} columns={companyJobColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
+          <Table dataSource={this.state.companySentimentResults} columns={companySentimentColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
         </div>
       </div>
     )
@@ -117,4 +75,4 @@ class CompanyJobsPage extends React.Component {
 
 }
 
-export default CompanyJobsPage
+export default CompanySentimentPage
