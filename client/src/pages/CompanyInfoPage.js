@@ -1,44 +1,49 @@
 import React from 'react';
-import { Form, FormInput, FormGroup, Button, Card, CardBody, CardTitle, Progress } from "shards-react";
+import { Container } from "shards-react";
 
 import {
-    Table,
-    Pagination,
-    Select,
-    Row,
-    Col,
-    Divider,
-    Slider,
-    Rate 
+    Image
 } from 'antd'
-import { RadarChart } from 'react-vis';
-import { format } from 'd3-format';
 
-
+import { withRouter } from "react-router";
 import { getCompanyInfo } from '../fetcher'
-const wideFormat = format('.3r');
+import { OmitProps } from 'antd/lib/transfer/ListBody';
+
+function ImageDemo(props) {
+    return (
+      <Image
+        width={200}
+        src={props.image}
+      />
+    );
+  }
+
 
 class CompanyInfoPage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            
+            companyInfo: Object
         }
     }
 
     componentDidMount() {
-        getCompanyInfo(this.props.symbol).then(res => {
-            this.setState({ companyInfo: res.results })
+        const symbol = this.props.match.params.symbol;
+
+        getCompanyInfo(symbol).then(res => {
+            this.setState({ companyInfo: res.results[0] })
         })
     }
 
     render() {
+        console.log(this.state.companyInfo);
         return (
             <div>
-                This company is {this.state.companyInfo.name}. We pray to Lord Shrivats!
+                <ImageDemo image={this.state.companyInfo.image}/>
+                This company is {this.state.companyInfo.companyName}.
             </div>
         )
     }
 }
 
-export default CompanyInfoPage
+export default withRouter(CompanyInfoPage)

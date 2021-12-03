@@ -8,7 +8,7 @@ const getCompanyNews = async (page, pagesize, symbol) => {
 }
 
 const getCompanyInfo = async (symbol) => {
-    var res = await fetch(`http://${config.server_host}:${config.server_port}/company/${symbol}`, {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/company/info/${symbol}`, {
         method: 'GET',
     })
     return res.json()

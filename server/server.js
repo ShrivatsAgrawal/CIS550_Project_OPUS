@@ -7,8 +7,6 @@ const config = require('./config.json')
 const cors = require('cors');
 
 const app = express();
-
-const app = express();
 app.use(cors({
     origin: '*'
 }));
