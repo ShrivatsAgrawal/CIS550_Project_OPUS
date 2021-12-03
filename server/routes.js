@@ -291,7 +291,7 @@ async function company_info(req, res) {
     var company = req.params.symbol? req.params.symbol : '%';
     connection.query(`SELECT *
     FROM CompanyInformation
-    WHERE symbol LIKE '%${company}%';` ,function (error, results, fields) {
+    WHERE symbol LIKE '${company}';` ,function (error, results, fields) {
         if (error) {
             console.log(error)
             res.json({ error: error })
