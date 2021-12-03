@@ -22,6 +22,13 @@ const getCompanyJobs = async (page, pagesize, symbol) => {
     return res.json()
 }
 
+const getCompanySentiment = async (page, pagesize, symbol) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/company/sentiment/${symbol}?page=${page}&pagesize=${pagesize}`, {
+        method: 'GET',
+    })
+    return res.json()
+}
+
 /*
 const getAllMatches = async (page, pagesize, league) => {
     var res = await fetch(`http://${config.server_host}:${config.server_port}/company/${league}?page=${page}&pagesize=${pagesize}`, {

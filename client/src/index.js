@@ -13,6 +13,7 @@ import "shards-ui/dist/css/shards.min.css"
 
 import CompanyJobsPage from './pages/CompanyJobsPage';
 import CompanyInfoPage from './pages/CompanyInfoPage';
+import CompanySentimentPage from './pages/CompanySentimentPage';
 
 ReactDOM.render(
   <div>
@@ -30,6 +31,12 @@ ReactDOM.render(
 							path="/company/info/:symbol"
 							render={() => (
 								<CompanyInfoPage />
+							)}/>
+
+		<Route exact
+							path="/company/sentiment/:symbol"
+							render={() => (
+								<CompanySentimentPage />
 							)}/>
       </Switch>
     </Router>
