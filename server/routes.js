@@ -211,7 +211,7 @@ async function company_news(req, res) {
                    url
             FROM Temp
             ORDER BY publishedDate DESC
-            LIMIT ${offset}, ${pagesize}`, function (error, results, fields) {
+            LIMIT ${offset}, ${pagesize};`, function (error, results, fields) {
             if (error) {
                 console.log(error)
                 res.json({ error: error })
@@ -223,7 +223,13 @@ async function company_news(req, res) {
         connection.query(`WITH T1 AS (SELECT DISTINCT peerID
             FROM Peers
             WHERE symbol LIKE '%${company}%' or peerID LIKE '%${company}%')
-        SELECT *
+        SELECT symbol, 
+               publishedDate,
+               title,
+               image,
+               site,
+               text,
+               url
         FROM CompanyNews CN JOIN T1 ON CN.symbol = T1.peerID
         ORDER BY publishedDate DESC 
         LIMIT 10;`, function (error, results, fields) {
