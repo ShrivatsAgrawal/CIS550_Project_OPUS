@@ -16,46 +16,46 @@ const companyNewsColumns = [
     title: 'Symbol',
     dataIndex: 'symbol',
     key: 'symbol',
-    sorter: (a, b) => a.symbol.localeCompare(b.symbol)
+    //sorter: (a, b) => a.symbol.localeCompare(b.symbol)
 },
 {
     title: 'PublishedDate',
     dataIndex: 'publishedDate',
     key: 'publishedDate',
-    sorter: (a, b) => a.companyName.localeCompare(b.companyName),
+    //sorter: (a, b) => a.companyName.localeCompare(b.companyName),
 },
 {
     title: 'Title',
     dataIndex: 'title',
     key: 'title',
-    sorter: (a, b) => a.sentiment - b.sentiment
+   // sorter: (a, b) => a.sentiment - b.sentiment
     
 },
 {
   title: 'Image',
   dataIndex: 'image',
   key: 'image',
-  sorter: (a, b) => a.sentiment - b.sentiment
+  //sorter: (a, b) => a.sentiment - b.sentiment
   
 },{
   title: 'Site',
   dataIndex: 'site',
   key: 'site',
-  sorter: (a, b) => a.sentiment - b.sentiment
+  //sorter: (a, b) => a.sentiment - b.sentiment
   
 },
 {
   title: 'Text',
   dataIndex: 'text',
   key: 'text',
-  sorter: (a, b) => a.sentiment - b.sentiment
+  //sorter: (a, b) => a.sentiment - b.sentiment
   
 },
 {
   title: 'Url',
   dataIndex: 'url',
   key: 'url',
-  sorter: (a, b) => a.sentiment - b.sentiment
+ //sorter: (a, b) => a.sentiment - b.sentiment
   
 }
 ];
@@ -77,7 +77,7 @@ class CompanyNewsPage extends React.Component {
 
   componentDidMount() {
     
-    getCompanyNews('AAPL').then(res => {
+    getCompanyNews(null,null,'a').then(res => {
       console.log(res)
       this.setState({ companyNewsResults: res.results})
 })
@@ -87,11 +87,10 @@ class CompanyNewsPage extends React.Component {
   render() {
 
     return (
-      <div>
-        
+      <div>        
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
           <h3>Jobs</h3>
-          <Table dataSource={this.state.companyNewsResults} columns={companyNewsColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
+          {/* <Table dataSource={this.state.companyNewsResults} columns={companyNewsColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/> */}
         </div>
       </div>
     )

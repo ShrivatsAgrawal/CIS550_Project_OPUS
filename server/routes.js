@@ -100,16 +100,14 @@ async function company_sentiment(req, res) {
 
 async function company_jobs(req, res) {
     var company = req.params.symbol?req.params.symbol : '%';
-    
     if (req.query.page && !isNaN(req.query.page)) {
         const page = req.query.page;
         const pagesize = req.query.pagesize ? req.query.pagesize : 10;
-        const offset= (page-1)*pagesize
         const queryJob=`WITH Temp AS (
             WITH T1 AS (SELECT DISTINCT peerID
             FROM Peers
             WHERE symbol LIKE '%${company}%' OR peerID LIKE '%${company}%')
-            SELECT *
+            SELECT ROW_NUMBER() OVER (ORDER BY postingDate) AS RowNum, *
             FROM IndeedJobs IJ JOIN T1 ON IJ.companySymbol = T1.peerID
             ORDER BY postingDate DESC)
             SELECT companySymbol, 
@@ -127,14 +125,13 @@ async function company_jobs(req, res) {
                    postingDate,
                    salary
             FROM Temp
-            ORDER BY PostingDate DESC
-            LIMIT ${offset},${pagesize}`
+            WHERE RowNum <= ${page} * ${pagesize} && RowNum > ${pagesize} * (${page} - 1)
+            ORDER BY PostingDate DESC`
 
         const query2=`SELECT * FROM Peers LIMIT 5;`
-        connection.query(queryJob, function (error, results, fields) {
+        connection.query(query2, function (error, results, fields) {
             if (error) {
                 console.log(error)
-                console.log(queryJob)
                 res.json({ error: error })
             } else if (results) {
                 res.json({results: results})
@@ -188,6 +185,7 @@ async function company_news(req, res) {
             }
         });
     } else {
+        console.log("secondd")
         connection.query(`WITH T1 AS (SELECT DISTINCT peerID
             FROM Peers
             WHERE symbol LIKE '%${company}%' or peerID LIKE '%${company}%')
@@ -291,7 +289,7 @@ async function company_info(req, res) {
     var company = req.params.symbol? req.params.symbol : '%';
     connection.query(`SELECT *
     FROM CompanyInformation
-    WHERE symbol LIKE '${company}';` ,function (error, results, fields) {
+    WHERE symbol LIKE '%${company}%';` ,function (error, results, fields) {
         if (error) {
             console.log(error)
             res.json({ error: error })
