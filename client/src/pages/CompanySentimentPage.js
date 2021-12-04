@@ -52,7 +52,7 @@ class CompanySentimentPage extends React.Component {
 
   componentDidMount() {
     
-    getCompanySentiment(this.state.companySentimentPageNumber, this.state.companySentimentPageSize, 'AAPL').then(res => {
+    getCompanySentiment('AAPL').then(res => {
       console.log(res)
       this.setState({ companySentimentResults: res.results})
 })
