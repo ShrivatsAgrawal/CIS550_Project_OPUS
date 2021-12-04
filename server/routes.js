@@ -160,11 +160,12 @@ async function company_news(req, res) {
     if (req.query.page && !isNaN(req.query.page)) {
         const page = req.query.page;
         const pagesize = req.query.pagesize ? req.query.pagesize : 10;
+        const offset = (page-1)*pagesize;
         connection.query(`WITH Temp AS (
             WITH T1 AS (SELECT DISTINCT peerID
             FROM Peers
             WHERE symbol LIKE '%${company}%' or peerID LIKE '%${company}%')
-            SELECT ROW_NUMBER() OVER (ORDER BY publishedDate) AS RowNum, *
+            SELECT *
             FROM CompanyNews CN JOIN T1 ON CN.symbol = T1.peerID
             ORDER BY publishedDate DESC)
             SELECT symbol, 
@@ -175,8 +176,8 @@ async function company_news(req, res) {
                    text,
                    url
             FROM Temp
-            WHERE RowNum <= ${page} * ${pagesize} && RowNum > ${pagesize} * (${page} - 1)
-            ORDER BY PostingDate DESC`, function (error, results, fields) {
+            ORDER BY publishedDate DESC
+            LIMIT ${offset}, ${pagesize}`, function (error, results, fields) {
             if (error) {
                 console.log(error)
                 res.json({ error: error })
