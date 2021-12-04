@@ -7,7 +7,7 @@ import {
 
 import MenuBar from '../components/MenuBar';
 import { getCompanyJobs } from '../fetcher'
-import { useParams } from 'react-router-dom';
+import { withRouter } from "react-router";
 const { Column, ColumnGroup } = Table;
 const { Option } = Select;
 
