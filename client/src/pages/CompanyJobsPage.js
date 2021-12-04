@@ -82,12 +82,13 @@ class CompanyJobsPage extends React.Component {
   
   constructor(props) {
     super(props)
-    //const { symbol } = this.props.match.params;
+    const { symbol } = this.props.match.params;
     this.state = {
     companyJobResults: [],
     companyJobsPageNumber: 1,
-    companyJobsPageSize: 12,
-    pagination: null 
+    companyJobsPageSize: 10,
+    pagination: null ,
+    symbol:symbol
     //symbol : symbol
     
 }
@@ -110,11 +111,12 @@ class CompanyJobsPage extends React.Component {
 }*/
 
   componentDidMount() {
-    
-    getCompanyJobs(this.state.companyJobsPageNumber, this.state.companyJobsPageSize, 'AAPL').then(res => {
+    //const symbol = this.props.match.params.symbol;
+    getCompanyJobs(this.state.companyJobsPageNumber, this.state.companyJobsPageSize, this.state.symbol).then(res => {
       console.log(res)
         //console.log("Symbol:"+this.state.symbol)
       this.setState({ companyJobResults: res.results})
+      
 })
 /*
     getAllPlayers().then(res => {
@@ -131,7 +133,7 @@ class CompanyJobsPage extends React.Component {
       <div>
         
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
-          <h3>Jobs</h3>
+          <h3>Jobs for {this.state.symbol}</h3>
           <Table dataSource={this.state.companyJobResults} columns={companyJobColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
         </div>
       </div>
@@ -140,5 +142,5 @@ class CompanyJobsPage extends React.Component {
 
 }
 
-export default CompanyJobsPage
+export default withRouter(CompanyJobsPage)
 
