@@ -74,7 +74,14 @@ const companyJobColumns = [
   key: 'searchLink',
   render: (text, row) => <a href={`${row.searchLink}`}>{text}</a>
   
-}
+},
+{
+  title: 'Company Type',
+  dataIndex: 'cmpType',
+  key: 'cmpType',
+  sorter: (a, b) => a.cmpType.localeCompare(b.cmpType)
+  
+},
 ];
 
 class CompanyJobsPage extends React.Component {
@@ -82,11 +89,11 @@ class CompanyJobsPage extends React.Component {
   
   constructor(props) {
     super(props)
-    const { symbol } = this.props.match.params;
+    const symbol  = this.props.match.params.symbol;
     this.state = {
     companyJobResults: [],
     companyJobsPageNumber: 1,
-    companyJobsPageSize: 10,
+    companyJobsPageSize: 10000,
     pagination: null ,
     symbol:symbol
     //symbol : symbol
@@ -133,7 +140,7 @@ class CompanyJobsPage extends React.Component {
       <div>
         
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
-          <h3>Jobs for {this.state.symbol}</h3>
+          <h3>Jobs by {this.state.symbol} and Peers</h3>
           <Table dataSource={this.state.companyJobResults} columns={companyJobColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
         </div>
       </div>
