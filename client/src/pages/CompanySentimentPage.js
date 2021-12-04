@@ -2,13 +2,12 @@
 import React from 'react';
 import {
   Table,
-  Pagination,
   Select
 } from 'antd'
 
 import MenuBar from '../components/MenuBar';
 import { getCompanySentiment } from '../fetcher'
-import { useParams } from 'react-router-dom';
+import { withRouter } from "react-router";
 const { Column, ColumnGroup } = Table;
 const { Option } = Select;
 
@@ -18,7 +17,8 @@ const companySentimentColumns = [
       title: 'Symbol',
       dataIndex: 'symbol',
       key: 'symbol',
-      sorter: (a, b) => a.symbol.localeCompare(b.symbol)
+      sorter: (a, b) => a.symbol.localeCompare(b.symbol),
+      render: (text, row) => <a href = {`${row.symbol}`}>{text}</a>
 },
 {
     title: 'Name',
@@ -40,24 +40,25 @@ class CompanySentimentPage extends React.Component {
   
   constructor(props) {
     super(props)
-    //const { symbol } = this.props.match.params;
+    const { symbol } = this.props.match.params;
     this.state = {
-    companySentimentResults: [],
-    companySentimentPageNumber: 1,
-    companySentimentPageSize: 12,
-    pagination: null 
-    
-}
+        companySentimentResults: 0,
+        avgPeerSentiment: 0,
+        peerSentimentResults: [],
+        symbol: symbol,
+        companyName: ''
+    }
 }
 
   componentDidMount() {
-    
-    getCompanySentiment(this.state.companySentimentPageNumber, this.state.companySentimentPageSize, 'AAPL').then(res => {
-      console.log(res)
-      this.setState({ companySentimentResults: res.results})
-})
-
-}
+    getCompanySentiment(this.state.symbol).then(res => {
+      console.log(res);
+      this.setState({companyName: res.results[0].companyName})
+      this.setState({ companySentimentResults: res.results[0].sentiment})
+      this.setState({ avgPeerSentiment: res.results[1].sentiment})
+      this.setState({ peerSentimentResults: res.results.slice(2, res.results.length)})
+    });
+  }
 
 
   render() {
@@ -66,8 +67,12 @@ class CompanySentimentPage extends React.Component {
       <div>
         
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
-          <h3>Jobs</h3>
-          <Table dataSource={this.state.companySentimentResults} columns={companySentimentColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
+          <h3>Company Sentiment for {this.state.companyName}</h3>
+          <p>Sentiment: {this.state.companySentimentResults}</p>
+          <h3>Peer Sentiment</h3>
+          <p>Average of Peers: {this.state.avgPeerSentiment}</p>
+          <h5>Peers</h5>
+          <Table dataSource={this.state.peerSentimentResults} columns={companySentimentColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
         </div>
       </div>
     )
@@ -75,4 +80,4 @@ class CompanySentimentPage extends React.Component {
 
 }
 
-export default CompanySentimentPage
+export default withRouter(CompanySentimentPage)
