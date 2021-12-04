@@ -14,12 +14,18 @@ import "shards-ui/dist/css/shards.min.css"
 import CompanyJobsPage from './pages/CompanyJobsPage';
 import CompanyInfoPage from './pages/CompanyInfoPage';
 import CompanySentimentPage from './pages/CompanySentimentPage';
+import SearchJobsPage from './pages/SearchJobs'
 
 ReactDOM.render(
   <div>
     <Router>
       <Switch>
-        
+	  <Route exact
+							path="/search/jobs/:symbol"
+							render={() => (
+								<SearchJobsPage />
+							)}/>
+
 		<Route exact
 							path="/company/jobs/:symbol"
 							render={() => (
@@ -38,6 +44,8 @@ ReactDOM.render(
 							render={() => (
 								<CompanySentimentPage />
 							)}/>
+
+		
       </Switch>
     </Router>
   </div>,

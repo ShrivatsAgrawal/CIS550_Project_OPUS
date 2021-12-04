@@ -76,7 +76,7 @@ const companyJobColumns = [
   
 },
 {
-  title: 'Company Type',
+  title: 'SELF/PEER',
   dataIndex: 'cmpType',
   key: 'cmpType',
   sorter: (a, b) => a.cmpType.localeCompare(b.cmpType)
