@@ -8,7 +8,7 @@ const getCompanyNews = async (page, pagesize, symbol) => {
 }
 
 const getCompanyInfo = async (symbol) => {
-    var res = await fetch(`http://${config.server_host}:${config.server_port}/company/${symbol}`, {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/company/info/${symbol}`, {
         method: 'GET',
     })
     return res.json()
@@ -22,8 +22,8 @@ const getCompanyJobs = async (page, pagesize, symbol) => {
     return res.json()
 }
 
-const getCompanySentiment = async (page, pagesize, symbol) => {
-    var res = await fetch(`http://${config.server_host}:${config.server_port}/company/sentiment/${symbol}?page=${page}&pagesize=${pagesize}`, {
+const getCompanySentiment = async (symbol) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/company/sentiment/${symbol}`, {
         method: 'GET',
     })
     return res.json()
@@ -78,5 +78,6 @@ const getPlayerSearch = async (name, nationality, club, rating_high, rating_low,
 export {
     getCompanyNews,
     getCompanyInfo,
-    getCompanyJobs
+    getCompanyJobs,
+    getCompanySentiment
 }
