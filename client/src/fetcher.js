@@ -22,8 +22,8 @@ const getCompanyJobs = async (page, pagesize, symbol) => {
     return res.json()
 }
 
-const getCompanySentiment = async (page, pagesize, symbol) => {
-    var res = await fetch(`http://${config.server_host}:${config.server_port}/company/sentiment/${symbol}?page=${page}&pagesize=${pagesize}`, {
+const getCompanySentiment = async (symbol) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/company/sentiment/${symbol}`, {
         method: 'GET',
     })
     return res.json()
