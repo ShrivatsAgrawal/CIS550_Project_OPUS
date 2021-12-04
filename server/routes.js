@@ -105,10 +105,41 @@ async function company_jobs(req, res) {
         const page = req.query.page;
         const pagesize = req.query.pagesize ? req.query.pagesize : 10;
         const offset= (page-1)*pagesize
-        const queryJob=`WITH Temp AS (
+        const queryJobs=`WITH Temp AS (
+            WITH T1 AS (SELECT DISTINCT peerID , 'SELF' as cmpType
+            FROM Peers
+            WHERE peerID LIKE '${company}'
+            UNION ALL
+            SELECT DISTINCT peerID , 'PEER' as cmpType
+            FROM Peers
+            WHERE symbol LIKE '${company}'
+            )
+            SELECT *
+            FROM IndeedJobs IJ JOIN T1 ON IJ.companySymbol = T1.peerID
+            ORDER BY postingDate DESC)
+            SELECT companySymbol, 
+                   searchCompany,
+                   jobType,
+                   jobCountry,
+                   searchLink,
+                   jobTitle,
+                   jobLink,
+                   jobCompany,
+                   companyLink,
+                   companyRating,
+                   jobLocation,
+                   shortDescription,
+                   postingDate,
+                   salary,
+                   cmpType
+            FROM Temp
+            ORDER BY companySymbol
+            LIMIT ${offset},${pagesize}`
+        
+        const queryJobsByPeers = `WITH Temp AS (
             WITH T1 AS (SELECT DISTINCT peerID
             FROM Peers
-            WHERE symbol LIKE '%${company}%' OR peerID LIKE '%${company}%')
+            WHERE symbol LIKE '${company}')
             SELECT *
             FROM IndeedJobs IJ JOIN T1 ON IJ.companySymbol = T1.peerID
             ORDER BY postingDate DESC)
@@ -127,14 +158,13 @@ async function company_jobs(req, res) {
                    postingDate,
                    salary
             FROM Temp
-            ORDER BY PostingDate DESC
+            ORDER BY companySymbol
             LIMIT ${offset},${pagesize}`
-
-        const query2=`SELECT * FROM Peers LIMIT 5;`
-        connection.query(queryJob, function (error, results, fields) {
+        //Test query : const query2=`SELECT * FROM Peers LIMIT 5;`
+        connection.query(queryJobs, function (error, results, fields) {
             if (error) {
                 console.log(error)
-                console.log(queryJob)
+                console.log(queryJobs)
                 res.json({ error: error })
             } else if (results) {
                 res.json({results: results})
@@ -157,6 +187,7 @@ async function company_jobs(req, res) {
         });
     }
 }
+
 
 async function company_news(req, res) {
     var company = req.params.symbol? req.params.symbol: '%';
