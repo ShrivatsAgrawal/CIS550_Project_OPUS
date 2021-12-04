@@ -78,5 +78,6 @@ const getPlayerSearch = async (name, nationality, club, rating_high, rating_low,
 export {
     getCompanyNews,
     getCompanyInfo,
-    getCompanyJobs
+    getCompanyJobs,
+    getCompanySentiment
 }
