@@ -55,6 +55,7 @@ class CompanySentimentPage extends React.Component {
         companySentimentResults: 0,
         companyIndex: 0,
         avgPeerSentiment: 0,
+        avgPeerIndex: 0,
         peerSentimentResults: [],
         symbol: symbol,
         companyName: ''
