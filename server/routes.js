@@ -92,7 +92,7 @@ async function company_sentiment(req, res) {
         WHERE T1.ID != '${company}')
         SELECT * FROM T5
         UNION ALL
-        SELECT T23.companyName, T23.symbol, T4.sentiment, T4,relativeIndex, T23.ord
+        SELECT T23.companyName, T23.symbol, T4.sentiment, T4.relativeIndex, T23.ord
         FROM T23 JOIN T4 ON T23.ID = T4.ID
         ORDER BY ord;`, function (error, results, fields) {
             if (error) {
