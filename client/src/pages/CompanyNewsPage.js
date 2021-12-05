@@ -5,11 +5,14 @@ import {
   Select
 } from 'antd'
 
+ import { Form, FormInput, FormGroup, Button, Card, CardBody, CardTitle, CardText, Progress ,CardImg, CardSubtitle} from "shards-react";
+
+
 import MenuBar from '../components/MenuBar';
 import { getCompanyNews } from '../fetcher'
 import { useParams } from 'react-router-dom';
 const { Column, ColumnGroup } = Table;
-const { Option } = Select;
+
 
 const companyNewsColumns = [
 {
@@ -30,48 +33,50 @@ const companyNewsColumns = [
     key: 'title',
     sorter: (a, b) => a.title.localeCompare(b.title),
     
+    
 },
 {
   title: 'Image',
   dataIndex: 'image',
   key: 'image',
-  //sorter: (a, b) => a.sentiment - b.sentiment
   
 },{
   title: 'Site',
   dataIndex: 'site',
   key: 'site',
-  //sorter: (a, b) => a.sentiment - b.sentiment
+  
   
 },
 {
   title: 'Text',
   dataIndex: 'text',
   key: 'text',
-  //sorter: (a, b) => a.sentiment - b.sentiment
+  
   
 },
 {
   title: 'Url',
   dataIndex: 'url',
   key: 'url',
- //sorter: (a, b) => a.sentiment - b.sentiment
- Cell: e =><a href={e.url}> {e.url} </a>
+ 
+ 
+ render: (text, row) => <a href={row.url}>{}</a>
   
 }
 ];
 
+   
 class CompanyNewsPage extends React.Component {
 
   
   constructor(props) {
     super(props)
-    //const { symbol } = this.props.match.params;
     this.state = {
     companyNewsResults: [],
     companyNewsPageNumber: 1,
     companyNewsPageSize: 12,
-    pagination: null 
+    pagination: null,
+    companyTitle:''
     
 }
 }
@@ -79,8 +84,10 @@ class CompanyNewsPage extends React.Component {
   componentDidMount() {
     
     getCompanyNews(null,null,'a').then(res => {
-      console.log(res)
+      
+      console.log(res.results)
       this.setState({ companyNewsResults: res.results})
+      
 })
 
 }
@@ -91,8 +98,24 @@ class CompanyNewsPage extends React.Component {
       <div>        
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
           <h3>News</h3>
-          <Table dataSource={this.state.companyNewsResults} columns={companyNewsColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/> 
-        </div>
+          {this.state.companyNewsResults.map(({title,image,text,url,site,publishedDate})=>{
+            return (
+        <Card className="card-style" onClick={()=>{}}>
+        <CardBody>
+        <CardTitle ><a href={url}>{title}</a></CardTitle>
+        <CardSubtitle>Source: {site}</CardSubtitle> 
+        <CardImg src={image} />
+        <CardSubtitle>{publishedDate}</CardSubtitle> 
+        <CardText>{text}</CardText>
+        
+        </CardBody>
+        </Card>  
+            )
+          })}
+          
+               
+
+          </div>
       </div>
     )
   }
