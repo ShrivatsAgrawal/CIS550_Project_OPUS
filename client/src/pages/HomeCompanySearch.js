@@ -10,6 +10,7 @@ import {
     Col,
     Divider,
     Slider,
+    InputNumber,
     Rate 
 } from 'antd'
 
@@ -34,7 +35,8 @@ const companyColumns = [
       title: 'Rating',
       dataIndex: 'companyRating',
       key: 'companyRating',
-      sorter: (a, b) => a.companyRating - b.companyRating  
+      sorter: (a, b) => a.companyRating - b.companyRating
+      // render: (text, row) => <Rate disabled allowHalf defaultValue={row.companyRating} />
   },
   {
     title: 'Number of Employees',
@@ -139,6 +141,10 @@ class HomeCompanySearch extends React.Component {
                         <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
                             <label>Sentiment</label>
                             <Slider range min={0} max={1} step={0.01} defaultValue={[0, 1]} onChange={this.handleSentimentChange} />
+                        </FormGroup></Col>
+                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
+                            <label>Number of Employees</label>
+                            <Slider range min={0} max={2300000} step={100} defaultValue={[0, 2300000]} onChange={this.handleEmployeeChange} />
                         </FormGroup></Col>
                         <Col flex={2}><FormGroup style={{ width: '10vw' }}>
                             <Button style={{ marginTop: '4vh' }} onClick={this.updateSearchResults}>Search</Button>
