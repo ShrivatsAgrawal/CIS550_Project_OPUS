@@ -103,11 +103,51 @@ async function company_jobs(req, res) {
     if (req.query.page && !isNaN(req.query.page)) {
         const page = req.query.page;
         const pagesize = req.query.pagesize ? req.query.pagesize : 10;
+<<<<<<< HEAD
         const queryJob=`WITH Temp AS (
             WITH T1 AS (SELECT DISTINCT peerID
             FROM Peers
             WHERE symbol LIKE '%${company}%' OR peerID LIKE '%${company}%')
             SELECT ROW_NUMBER() OVER (ORDER BY postingDate) AS RowNum, *
+=======
+        const offset= (page-1)*pagesize
+        const queryJobs=`WITH Temp AS (
+            WITH T1 AS (SELECT DISTINCT peerID , 'SELF' as cmpType
+            FROM Peers
+            WHERE peerID LIKE '${company}'
+            UNION ALL
+            SELECT DISTINCT peerID , 'PEER' as cmpType
+            FROM Peers
+            WHERE symbol LIKE '${company}'
+            )
+            SELECT *
+            FROM IndeedJobs IJ JOIN T1 ON IJ.companySymbol = T1.peerID
+            ORDER BY postingDate DESC)
+            SELECT companySymbol, 
+                   searchCompany,
+                   jobType,
+                   jobCountry,
+                   searchLink,
+                   jobTitle,
+                   jobLink,
+                   jobCompany,
+                   companyLink,
+                   companyRating,
+                   jobLocation,
+                   shortDescription,
+                   postingDate,
+                   salary,
+                   cmpType
+            FROM Temp
+            ORDER BY companySymbol
+            LIMIT ${offset},${pagesize}`
+        
+        const queryJobsByPeers = `WITH Temp AS (
+            WITH T1 AS (SELECT DISTINCT peerID
+            FROM Peers
+            WHERE symbol LIKE '${company}')
+            SELECT *
+>>>>>>> 12c92a0a2eca6999477d944c5dddb134b6591e41
             FROM IndeedJobs IJ JOIN T1 ON IJ.companySymbol = T1.peerID
             ORDER BY postingDate DESC)
             SELECT companySymbol, 
@@ -125,6 +165,7 @@ async function company_jobs(req, res) {
                    postingDate,
                    salary
             FROM Temp
+<<<<<<< HEAD
             WHERE RowNum <= ${page} * ${pagesize} && RowNum > ${pagesize} * (${page} - 1)
             ORDER BY PostingDate DESC`
 
@@ -132,6 +173,15 @@ async function company_jobs(req, res) {
         connection.query(query2, function (error, results, fields) {
             if (error) {
                 console.log(error)
+=======
+            ORDER BY companySymbol
+            LIMIT ${offset},${pagesize}`
+        //Test query : const query2=`SELECT * FROM Peers LIMIT 5;`
+        connection.query(queryJobs, function (error, results, fields) {
+            if (error) {
+                console.log(error)
+                console.log(queryJobs)
+>>>>>>> 12c92a0a2eca6999477d944c5dddb134b6591e41
                 res.json({ error: error })
             } else if (results) {
                 res.json({results: results})
@@ -155,6 +205,7 @@ async function company_jobs(req, res) {
     }
 }
 
+
 async function company_news(req, res) {
     var company = req.params.symbol? req.params.symbol: '%';
     if (req.query.page && !isNaN(req.query.page)) {
@@ -177,7 +228,7 @@ async function company_news(req, res) {
                    url
             FROM Temp
             ORDER BY publishedDate DESC
-            LIMIT ${offset}, ${pagesize}`, function (error, results, fields) {
+            LIMIT ${offset}, ${pagesize};`, function (error, results, fields) {
             if (error) {
                 console.log(error)
                 res.json({ error: error })
@@ -190,7 +241,13 @@ async function company_news(req, res) {
         connection.query(`WITH T1 AS (SELECT DISTINCT peerID
             FROM Peers
             WHERE symbol LIKE '%${company}%' or peerID LIKE '%${company}%')
-        SELECT *
+        SELECT symbol, 
+               publishedDate,
+               title,
+               image,
+               site,
+               text,
+               url
         FROM CompanyNews CN JOIN T1 ON CN.symbol = T1.peerID
         ORDER BY publishedDate DESC 
         LIMIT 10;`, function (error, results, fields) {
@@ -216,7 +273,7 @@ async function all_companies(req, res) {
     const numEmployeesLow = req.query.numEmployeesLow ? req.query.numEmployeesLow : 0
     const numEmployeesHigh = req.query.numEmployeesHigh ? req.query.numEmployeesHigh : 8000000000
     const mktcapLow = req.query.mktcapLow ? req.query.mktcapLow : 0
-    const mktcapHigh = req.query.mktcapHigh ? req.query.mktcapHigh : 10000000000
+    const mktcapHigh = req.query.mktcapHigh ? req.query.mktcapHigh : 1000000000000000
     const sentiLow = req.query.sentiLow ? req.query.sentiLow : 0
     const sentiHigh = req.query.sentiHigh ? req.query.sentiHigh : 1
     const jobNum = req.query.jobNum ? req.query.jobNum : 5
@@ -225,12 +282,12 @@ async function all_companies(req, res) {
         // This is the case where page is defined.
         
         connection.query(`WITH tmp1 AS
-        (SELECT symbol,companyName
+        (SELECT symbol, companyName, fullTimeEmployees, mktCap
         FROM CompanyInformation
-        WHERE companyName LIKE '${cmpName}' and
+        WHERE companyName LIKE '%${cmpName}%' and
         fullTimeEmployees BETWEEN ${numEmployeesLow} AND ${numEmployeesHigh}
         AND mktCap BETWEEN ${mktcapLow} AND ${mktcapHigh}),
-        tmp2 AS (SELECT s.symbol, tmp1.companyName
+        tmp2 AS (SELECT s.symbol, tmp1.companyName, tmp1.fullTimeEmployees, tmp1.mktCap, s.sentiment
         FROM CompanySentiments s
         JOIN tmp1
         ON tmp1.symbol= s.symbol
@@ -254,12 +311,12 @@ async function all_companies(req, res) {
     } else {
         
         connection.query(`WITH tmp1 AS
-        (SELECT symbol,companyName
+        (SELECT symbol, companyName, fullTimeEmployees, mktCap
         FROM CompanyInformation
-        WHERE companyName LIKE '${cmpName}' and
+        WHERE companyName LIKE '%${cmpName}%' and
         fullTimeEmployees BETWEEN ${numEmployeesLow} AND ${numEmployeesHigh}
         AND mktCap BETWEEN ${mktcapLow} AND ${mktcapHigh}),
-        tmp2 AS (SELECT s.symbol, tmp1.companyName
+        tmp2 AS (SELECT s.symbol, tmp1.companyName, tmp1.fullTimeEmployees, tmp1.mktCap, s.sentiment
         FROM CompanySentiments s
         JOIN tmp1
         ON tmp1.symbol= s.symbol
