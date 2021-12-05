@@ -2,7 +2,8 @@
 import React from 'react';
 import {
   Table,
-  Select
+  Select,
+  Divider
 } from 'antd'
 
 import MenuBar from '../components/MenuBar';
@@ -67,9 +68,9 @@ class CompanySentimentPage extends React.Component {
       <div>
         
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
-          <h3>Company Sentiment for {this.state.companyName}</h3>
+          <Divider>Company Sentiment for {this.state.companyName}</Divider>
           <p>Sentiment: {this.state.companySentimentResults}</p>
-          <h3>Peer Sentiment</h3>
+          <Divider>Peer Sentiment</Divider>
           <p>Average of Peers: {this.state.avgPeerSentiment}</p>
           <h5>Peers</h5>
           <Table dataSource={this.state.peerSentimentResults} columns={companySentimentColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
