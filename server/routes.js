@@ -264,12 +264,12 @@ async function all_companies(req, res) {
         // This is the case where page is defined.
         
         connection.query(`WITH tmp1 AS
-        (SELECT symbol,companyName
+        (SELECT symbol, companyName, fullTimeEmployees, mktCap
         FROM CompanyInformation
         WHERE companyName LIKE '%${cmpName}%' and
         fullTimeEmployees BETWEEN ${numEmployeesLow} AND ${numEmployeesHigh}
         AND mktCap BETWEEN ${mktcapLow} AND ${mktcapHigh}),
-        tmp2 AS (SELECT s.symbol, tmp1.companyName
+        tmp2 AS (SELECT s.symbol, tmp1.companyName, tmp1.fullTimeEmployees, tmp1.mktCap, s.sentiment
         FROM CompanySentiments s
         JOIN tmp1
         ON tmp1.symbol= s.symbol
@@ -293,12 +293,12 @@ async function all_companies(req, res) {
     } else {
         
         connection.query(`WITH tmp1 AS
-        (SELECT symbol,companyName
+        (SELECT symbol, companyName, fullTimeEmployees, mktCap
         FROM CompanyInformation
         WHERE companyName LIKE '%${cmpName}%' and
         fullTimeEmployees BETWEEN ${numEmployeesLow} AND ${numEmployeesHigh}
         AND mktCap BETWEEN ${mktcapLow} AND ${mktcapHigh}),
-        tmp2 AS (SELECT s.symbol, tmp1.companyName
+        tmp2 AS (SELECT s.symbol, tmp1.companyName, tmp1.fullTimeEmployees, tmp1.mktCap, s.sentiment
         FROM CompanySentiments s
         JOIN tmp1
         ON tmp1.symbol= s.symbol
