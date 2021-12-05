@@ -3,7 +3,8 @@ import React from 'react';
 import {
   Table,
   Select,
-  Divider
+  Divider,
+  Progress
 } from 'antd'
 
 import MenuBar from '../components/MenuBar';
@@ -31,8 +32,16 @@ const companySentimentColumns = [
     title: 'Sentiment',
     dataIndex: 'sentiment',
     key: 'sentiment',
-    sorter: (a, b) => a.sentiment - b.sentiment
+    sorter: (a, b) => a.sentiment - b.sentiment,
+    render: (text, row) => <p>{row.sentiment*100}</p>
     
+},
+{
+    title: 'Popularity',
+    dataIndex: 'absoluteIndex',
+    key: 'absoluteIndex',
+    sorter: (a, b) => a.absoluteIndex - b.absoluteIndex,
+    render: (text, row) => <p>{row.absoluteIndex*100}</p>    
 }
 ];
 
@@ -44,6 +53,7 @@ class CompanySentimentPage extends React.Component {
     const { symbol } = this.props.match.params;
     this.state = {
         companySentimentResults: 0,
+        companyIndex: 0,
         avgPeerSentiment: 0,
         peerSentimentResults: [],
         symbol: symbol,
@@ -56,6 +66,7 @@ class CompanySentimentPage extends React.Component {
       console.log(res);
       this.setState({companyName: res.results[0].companyName})
       this.setState({ companySentimentResults: res.results[0].sentiment})
+      this.setState({companyIndex: res.results[0].absoluteIndex})
       this.setState({ avgPeerSentiment: res.results[1].sentiment})
       this.setState({ peerSentimentResults: res.results.slice(2, res.results.length)})
     });
@@ -69,7 +80,10 @@ class CompanySentimentPage extends React.Component {
         
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
           <Divider>Company Sentiment for {this.state.companyName}</Divider>
-          <p>Sentiment: {this.state.companySentimentResults}</p>
+          <p>Sentiment: what people think of this company</p>
+          <Progress percent={this.state.companySentimentResults * 100}></Progress>
+          <p>Popularity: how much people talk about this company</p>
+          <Progress percent={this.state.companyIndex * 100}></Progress>
           <Divider>Peer Sentiment</Divider>
           <p>Average of Peers: {this.state.avgPeerSentiment}</p>
           <h5>Peers</h5>
