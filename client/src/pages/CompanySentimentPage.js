@@ -68,6 +68,7 @@ class CompanySentimentPage extends React.Component {
       this.setState({ companySentimentResults: res.results[0].sentiment})
       this.setState({companyIndex: res.results[0].absoluteIndex})
       this.setState({ avgPeerSentiment: res.results[1].sentiment})
+      this.setState({avgPeerIndex: res.results[1].absoluteIndex})
       this.setState({ peerSentimentResults: res.results.slice(2, res.results.length)})
     });
   }
@@ -80,12 +81,11 @@ class CompanySentimentPage extends React.Component {
         
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
           <Divider>Company Sentiment for {this.state.companyName}</Divider>
-          <p>Sentiment: what people think of this company</p>
-          <Progress percent={this.state.companySentimentResults * 100}></Progress>
-          <p>Popularity: how much people talk about this company</p>
-          <Progress percent={this.state.companyIndex * 100}></Progress>
+          <p>Sentiment: what people think of this company<Progress percent={this.state.companySentimentResults * 100}/></p>
+          <p>Popularity: how much people talk about this company<Progress percent={this.state.companyIndex * 100}/></p>
           <Divider>Peer Sentiment</Divider>
-          <p>Average of Peers: {this.state.avgPeerSentiment}</p>
+          <p>Average Sentiment of Peers <Progress percent = {this.state.avgPeerSentiment*100}/></p>
+          <p>Average Popularity of Peers <Progress percent = {this.state.avgPeerIndex*100}/></p>
           <h5>Peers</h5>
           <Table dataSource={this.state.peerSentimentResults} columns={companySentimentColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
         </div>
