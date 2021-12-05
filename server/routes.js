@@ -255,7 +255,7 @@ async function all_companies(req, res) {
     const numEmployeesLow = req.query.numEmployeesLow ? req.query.numEmployeesLow : 0
     const numEmployeesHigh = req.query.numEmployeesHigh ? req.query.numEmployeesHigh : 8000000000
     const mktcapLow = req.query.mktcapLow ? req.query.mktcapLow : 0
-    const mktcapHigh = req.query.mktcapHigh ? req.query.mktcapHigh : 10000000000
+    const mktcapHigh = req.query.mktcapHigh ? req.query.mktcapHigh : 1000000000000000
     const sentiLow = req.query.sentiLow ? req.query.sentiLow : 0
     const sentiHigh = req.query.sentiHigh ? req.query.sentiHigh : 1
     const jobNum = req.query.jobNum ? req.query.jobNum : 5
@@ -266,7 +266,7 @@ async function all_companies(req, res) {
         connection.query(`WITH tmp1 AS
         (SELECT symbol,companyName
         FROM CompanyInformation
-        WHERE companyName LIKE '${cmpName}' and
+        WHERE companyName LIKE '%${cmpName}%' and
         fullTimeEmployees BETWEEN ${numEmployeesLow} AND ${numEmployeesHigh}
         AND mktCap BETWEEN ${mktcapLow} AND ${mktcapHigh}),
         tmp2 AS (SELECT s.symbol, tmp1.companyName
@@ -295,7 +295,7 @@ async function all_companies(req, res) {
         connection.query(`WITH tmp1 AS
         (SELECT symbol,companyName
         FROM CompanyInformation
-        WHERE companyName LIKE '${cmpName}' and
+        WHERE companyName LIKE '%${cmpName}%' and
         fullTimeEmployees BETWEEN ${numEmployeesLow} AND ${numEmployeesHigh}
         AND mktCap BETWEEN ${mktcapLow} AND ${mktcapHigh}),
         tmp2 AS (SELECT s.symbol, tmp1.companyName
