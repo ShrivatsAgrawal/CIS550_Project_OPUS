@@ -29,6 +29,12 @@ const getCompanySentiment = async (symbol) => {
     return res.json()
 }
 
+const getCompanies = async (companyName, numEmployeesLow, numEmployeesHigh, mktcapLow, mktcapHigh, sentiLow, sentiHigh, jobNum) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/search/company?companyName=${companyName}&numEmployeesLow=${numEmployeesLow}&numEmployeesHigh=${numEmployeesHigh}&mktcapLow=${mktcapLow}&mktcapHigh=${mktcapHigh}&sentiLow=${sentiLow}&sentiHigh=${sentiHigh}&jobNum=${jobNum}`, {
+        method: 'GET',
+    })
+    return res.json()
+}
 /*
 const getAllMatches = async (page, pagesize, league) => {
     var res = await fetch(`http://${config.server_host}:${config.server_port}/company/${league}?page=${page}&pagesize=${pagesize}`, {
@@ -79,5 +85,6 @@ export {
     getCompanyNews,
     getCompanyInfo,
     getCompanyJobs,
-    getCompanySentiment
+    getCompanySentiment,
+    getCompanies
 }

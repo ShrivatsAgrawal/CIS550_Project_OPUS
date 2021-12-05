@@ -15,6 +15,7 @@ import CompanyJobsPage from './pages/CompanyJobsPage';
 import CompanyInfoPage from './pages/CompanyInfoPage';
 import CompanySentimentPage from './pages/CompanySentimentPage';
 import SearchJobsPage from './pages/SearchJobs'
+import HomeCompanySearch from './pages/HomeCompanySearch'
 
 ReactDOM.render(
   <div>
@@ -43,6 +44,11 @@ ReactDOM.render(
 							path="/company/sentiment/:symbol"
 							render={() => (
 								<CompanySentimentPage />
+							)}/>
+		<Route exact
+							path="/"
+							render={() => (
+								<HomeCompanySearch />
 							)}/>
 
 		
