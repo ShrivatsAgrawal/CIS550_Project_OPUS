@@ -16,19 +16,19 @@ const companyNewsColumns = [
     title: 'Symbol',
     dataIndex: 'symbol',
     key: 'symbol',
-    //sorter: (a, b) => a.symbol.localeCompare(b.symbol)
+    sorter: (a, b) => a.symbol.localeCompare(b.symbol)
 },
 {
     title: 'PublishedDate',
     dataIndex: 'publishedDate',
     key: 'publishedDate',
-    //sorter: (a, b) => a.companyName.localeCompare(b.companyName),
+    sorter: (a, b) => a.publishedDate.localeCompare(b.publishedDate)
 },
 {
     title: 'Title',
     dataIndex: 'title',
     key: 'title',
-   // sorter: (a, b) => a.sentiment - b.sentiment
+    sorter: (a, b) => a.title.localeCompare(b.title),
     
 },
 {
@@ -56,6 +56,7 @@ const companyNewsColumns = [
   dataIndex: 'url',
   key: 'url',
  //sorter: (a, b) => a.sentiment - b.sentiment
+ Cell: e =><a href={e.url}> {e.url} </a>
   
 }
 ];
@@ -89,8 +90,8 @@ class CompanyNewsPage extends React.Component {
     return (
       <div>        
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
-          <h3>Jobs</h3>
-          {/* <Table dataSource={this.state.companyNewsResults} columns={companyNewsColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/> */}
+          <h3>News</h3>
+          <Table dataSource={this.state.companyNewsResults} columns={companyNewsColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/> 
         </div>
       </div>
     )
