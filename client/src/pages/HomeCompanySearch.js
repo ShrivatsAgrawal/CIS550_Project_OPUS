@@ -125,7 +125,7 @@ class HomeCompanySearch extends React.Component {
     render() {
         return (
             <div>
-                <Form style={{ width: '80vw', margin: '0 auto', marginTop: '5vh' }}>
+                <Form style={{ width: '100vw', margin: '0 auto', marginTop: '5vh' }}>
                     <Row>
                         <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
                             <label>Name</label>
@@ -138,7 +138,7 @@ class HomeCompanySearch extends React.Component {
                     </Row>
                     <br></br>
                     <Row>
-                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
+                        <Col offset={2} flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
                             <label>Sentiment</label>
                             <Slider range min={0} max={1} step={0.01} defaultValue={[0, 1]} onChange={this.handleSentimentChange} />
                         </FormGroup></Col>
