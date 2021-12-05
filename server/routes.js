@@ -103,13 +103,6 @@ async function company_jobs(req, res) {
     if (req.query.page && !isNaN(req.query.page)) {
         const page = req.query.page;
         const pagesize = req.query.pagesize ? req.query.pagesize : 10;
-<<<<<<< HEAD
-        const queryJob=`WITH Temp AS (
-            WITH T1 AS (SELECT DISTINCT peerID
-            FROM Peers
-            WHERE symbol LIKE '%${company}%' OR peerID LIKE '%${company}%')
-            SELECT ROW_NUMBER() OVER (ORDER BY postingDate) AS RowNum, *
-=======
         const offset= (page-1)*pagesize
         const queryJobs=`WITH Temp AS (
             WITH T1 AS (SELECT DISTINCT peerID , 'SELF' as cmpType
@@ -147,7 +140,6 @@ async function company_jobs(req, res) {
             FROM Peers
             WHERE symbol LIKE '${company}')
             SELECT *
->>>>>>> 12c92a0a2eca6999477d944c5dddb134b6591e41
             FROM IndeedJobs IJ JOIN T1 ON IJ.companySymbol = T1.peerID
             ORDER BY postingDate DESC)
             SELECT companySymbol, 
@@ -165,15 +157,6 @@ async function company_jobs(req, res) {
                    postingDate,
                    salary
             FROM Temp
-<<<<<<< HEAD
-            WHERE RowNum <= ${page} * ${pagesize} && RowNum > ${pagesize} * (${page} - 1)
-            ORDER BY PostingDate DESC`
-
-        const query2=`SELECT * FROM Peers LIMIT 5;`
-        connection.query(query2, function (error, results, fields) {
-            if (error) {
-                console.log(error)
-=======
             ORDER BY companySymbol
             LIMIT ${offset},${pagesize}`
         //Test query : const query2=`SELECT * FROM Peers LIMIT 5;`
@@ -181,7 +164,6 @@ async function company_jobs(req, res) {
             if (error) {
                 console.log(error)
                 console.log(queryJobs)
->>>>>>> 12c92a0a2eca6999477d944c5dddb134b6591e41
                 res.json({ error: error })
             } else if (results) {
                 res.json({results: results})
