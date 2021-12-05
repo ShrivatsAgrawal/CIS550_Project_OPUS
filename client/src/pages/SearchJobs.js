@@ -84,7 +84,7 @@ const companyJobColumns = [
 },
 ];
 
-class CompanyJobsPage extends React.Component {
+class SearchJobsPage extends React.Component {
 
   
   constructor(props) {
@@ -149,5 +149,5 @@ class CompanyJobsPage extends React.Component {
 
 }
 
-export default withRouter(CompanyJobsPage)
+export default withRouter(SearchJobsPage)
 
