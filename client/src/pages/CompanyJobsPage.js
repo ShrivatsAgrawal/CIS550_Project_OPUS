@@ -114,7 +114,8 @@ class CompanyJobsPage extends React.Component {
     
   if (value){
     this.setState({companyJobResults : this.state.allJobResults})
-  console.log(`Something is executing ${value}`)}
+  //console.log(`Something is executing ${value}`)
+            }
   else {
     this.setState( {companyJobResults : this.state.allJobResults.filter(item => item.cmpType == "SELF")})
   }
