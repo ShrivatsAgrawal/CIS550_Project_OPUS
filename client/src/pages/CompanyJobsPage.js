@@ -2,7 +2,8 @@ import React from 'react';
 import {
   Table,
   Pagination,
-  Select
+  Select,
+  Switch
 } from 'antd'
 
 import MenuBar from '../components/MenuBar';
@@ -139,8 +140,10 @@ class CompanyJobsPage extends React.Component {
     return (
       <div>
         
+
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
-          <h3>Jobs by {this.state.symbol} and Peers</h3>
+          <h3>Jobs by {this.state.symbol}</h3>
+          <h5>Show Jobs by Peers: <Switch checkedChildren="On" unCheckedChildren="Off" defaultChecked /></h5>
           <Table dataSource={this.state.companyJobResults} columns={companyJobColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
         </div>
       </div>
