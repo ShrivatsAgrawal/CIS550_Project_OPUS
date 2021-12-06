@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { Container } from "shards-react";
-
 import {
     Image, Descriptions, Badge, Progress
 } from 'antd'
@@ -9,7 +7,7 @@ import {
 import { withRouter } from "react-router";
 import { getCompanyInfo } from '../fetcher'
 
-function ImageDemo(props) {
+function ImageLoader(props) {
     return (
       <Image
         width={100}
@@ -41,7 +39,7 @@ class CompanyInfoPage extends React.Component {
             <div>
             <Descriptions title="Company Information" bordered>
                 <Descriptions.Item label="Name">{this.state.companyInfo.companyName}</Descriptions.Item>
-                <Descriptions.Item label="Logo"><ImageDemo image={this.state.companyInfo.image}/></Descriptions.Item>
+                <Descriptions.Item label="Logo"><ImageLoader image={this.state.companyInfo.image}/></Descriptions.Item>
                 <Descriptions.Item label="Country">{this.state.companyInfo.country}</Descriptions.Item>
                 <Descriptions.Item label="Sector">{this.state.companyInfo.sector}</Descriptions.Item>
                 <Descriptions.Item label="Industry">{this.state.companyInfo.industry}</Descriptions.Item>

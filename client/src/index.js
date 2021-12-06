@@ -16,6 +16,7 @@ import CompanyInfoPage from './pages/CompanyInfoPage';
 import CompanySentimentPage from './pages/CompanySentimentPage';
 import CompanyNewsPage from './pages/CompanyNewsPage';
 import SearchJobsPage from './pages/SearchJobs'
+import HomeCompanySearch from './pages/HomeCompanySearch'
 
 ReactDOM.render(
   <div>
@@ -46,6 +47,12 @@ ReactDOM.render(
 								<CompanySentimentPage />
 							)}/>
 		<Route exact
+							path="/"
+							render={() => (
+								<HomeCompanySearch />
+							)}/>
+		<Route exact
+		
 							path="/company/news/:symbol"
 							render={() => (
 								<CompanyNewsPage />
