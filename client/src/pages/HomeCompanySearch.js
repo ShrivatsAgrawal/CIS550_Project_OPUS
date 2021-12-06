@@ -1,17 +1,13 @@
 import React from 'react';
 
-import { Form, FormInput, FormGroup, Button, Card, CardBody, CardTitle, Progress } from "shards-react";
+import { Form, FormInput, FormGroup, Button } from "shards-react";
 
 import {
     Table,
-    Pagination,
-    Select,
     Row,
     Col,
     Divider,
-    Slider,
-    InputNumber,
-    Rate 
+    Slider
 } from 'antd'
 
 import { withRouter } from "react-router";
