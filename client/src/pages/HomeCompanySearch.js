@@ -1,17 +1,13 @@
 import React from 'react';
 
-import { Form, FormInput, FormGroup, Button, Card, CardBody, CardTitle, Progress } from "shards-react";
+import { Form, FormInput, FormGroup, Button } from "shards-react";
 
 import {
     Table,
-    Pagination,
-    Select,
     Row,
     Col,
     Divider,
-    Slider,
-    InputNumber,
-    Rate 
+    Slider
 } from 'antd'
 
 import { withRouter } from "react-router";
@@ -29,7 +25,7 @@ const companyColumns = [
       dataIndex: 'companyName',
       key: 'companyName',
       sorter: (a, b) => a.jobCompany.localeCompare(b.jobCompany),
-      render: (text, row) => <a href={`${row.companyLink}`}>{text}</a>
+      render: (text, row) => <a href = {`/company/info/${row.symbol}`}>{text}</a>
   },
   
   {

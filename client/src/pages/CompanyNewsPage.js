@@ -7,7 +7,7 @@ import {
 
  import { Form, FormInput, FormGroup, Button, Card, CardBody, CardTitle, CardText, Progress ,CardImg, CardSubtitle} from "shards-react";
 
-
+ import { withRouter } from "react-router";
 import MenuBar from '../components/MenuBar';
 import { getCompanyNews } from '../fetcher'
 import { useParams } from 'react-router-dom';
@@ -71,19 +71,21 @@ class CompanyNewsPage extends React.Component {
   
   constructor(props) {
     super(props)
+    const { symbol } = this.props.match.params;
     this.state = {
     companyNewsResults: [],
     companyNewsPageNumber: 1,
     companyNewsPageSize: 12,
     pagination: null,
-    companyTitle:''
+    companyTitle:'',
+    symbol: symbol
     
 }
 }
 
   componentDidMount() {
     
-    getCompanyNews(null,null,'a').then(res => {
+    getCompanyNews(this.state.companyJobsPageNumber, this.state.companyJobsPageSize,this.state.symbol).then(res => {
       
       console.log(res.results)
       this.setState({ companyNewsResults: res.results})
@@ -122,5 +124,5 @@ class CompanyNewsPage extends React.Component {
 
 }
 
-export default CompanyNewsPage
+export default withRouter(CompanyNewsPage)
 
