@@ -31,13 +31,7 @@ const companyColumns = [
       sorter: (a, b) => a.jobCompany.localeCompare(b.jobCompany),
       render: (text, row) => <a href={`${row.companyLink}`}>{text}</a>
   },
-  {
-      title: 'Rating',
-      dataIndex: 'companyRating',
-      key: 'companyRating',
-      sorter: (a, b) => a.companyRating - b.companyRating
-      // render: (text, row) => <Rate disabled allowHalf defaultValue={row.companyRating} />
-  },
+  
   {
     title: 'Number of Employees',
     dataIndex: 'fullTimeEmployees',
@@ -62,6 +56,13 @@ const companyColumns = [
     key: 'JobCount',
     sorter: (a, b) => a.JobCount - b.JobCount
   },
+  {
+    title: 'Rating',
+    dataIndex: 'companyRating',
+    key: 'companyRating',
+    sorter: (a, b) => a.companyRating - b.companyRating,
+    render: (text, row) => <div>{text?.toFixed(1)}⭐</div> 
+},
   ];
 
 class HomeCompanySearch extends React.Component {
@@ -81,8 +82,12 @@ class HomeCompanySearch extends React.Component {
 
         this.updateSearchResults = this.updateSearchResults.bind(this)
         this.handleNameQueryChange = this.handleNameQueryChange.bind(this)
-        this.handleEmployeeChange = this.handleEmployeeChange.bind(this)
-        this.handleMktcapChange = this.handleMktcapChange.bind(this)
+        
+        this.handleEmployeeMinChange = this.handleEmployeeMinChange.bind(this)
+        this.handleEmployeeMaxChange = this.handleEmployeeMaxChange.bind(this)
+        this.handleMktcapMinChange = this.handleMktcapMinChange.bind(this)
+        this.handleMktcapMaxChange = this.handleMktcapMaxChange.bind(this)
+
         this.handleSentimentChange = this.handleSentimentChange.bind(this)
         this.handleJobNumChange = this.handleJobNumChange.bind(this)
     }
@@ -91,14 +96,20 @@ class HomeCompanySearch extends React.Component {
         this.setState({ nameQuery: event.target.value })
     }
 
-    handleEmployeeChange(value) {
-        this.setState({ employeeLowQuery: value[0] })
-        this.setState({ employeeHighQuery: value[1] })
+    handleEmployeeMinChange(event) {
+        this.setState({ employeeLowQuery: event.target.value })
     }
 
-    handleMktcapChange(value) {
-        this.setState({ mktcapLowQuery: value[0] })
-        this.setState({ mktcapHighQuery: value[1] })
+    handleEmployeeMaxChange(event) {
+        this.setState({ employeeHighQuery: event.target.value })
+    }
+
+    handleMktcapMaxChange(event) {
+        this.setState({ mktcapHighQuery: event.target.value })
+    }
+
+    handleMktcapMinChange(event) {
+        this.setState({ mktcapLowQuery: event.target.value })
     }
 
     handleSentimentChange(value) {
@@ -133,7 +144,15 @@ class HomeCompanySearch extends React.Component {
                         </FormGroup></Col>
                         <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
                             <label>Minimum Number of Jobs</label>
-                            <FormInput placeholder={5} value={this.state.jobNumQuery} onChange={this.handleJobNumChange} />
+                            <FormInput placeholder="0? Already Employed? Party!" value={this.state.jobNumQuery} onChange={this.handleJobNumChange} />
+                        </FormGroup></Col>
+                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
+                            <label>Minimum Employees</label>
+                            <FormInput placeholder="0? Even a startup will have 1!" value={this.state.employeeLowQuery} onChange={this.handleEmployeeMinChange} />
+                        </FormGroup></Col>
+                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
+                            <label>Maximum Employees</label>
+                            <FormInput placeholder="A relatively high number!" value={this.state.employeeHighQuery} onChange={this.handleEmployeeMaxChange} />
                         </FormGroup></Col>
                     </Row>
                     <br></br>
@@ -143,17 +162,20 @@ class HomeCompanySearch extends React.Component {
                             <Slider range min={0} max={1} step={0.01} defaultValue={[0, 1]} onChange={this.handleSentimentChange} />
                         </FormGroup></Col>
                         <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
-                            <label>Number of Employees</label>
-                            <Slider range min={0} max={2300000} step={100} defaultValue={[0, 2300000]} onChange={this.handleEmployeeChange} />
+                            <label>Minimum Market Cap</label>
+                            <FormInput placeholder="Is 0 even possible?" value={this.state.mktcapLowQuery} onChange={this.handleMktcapMinChange} />
+                        </FormGroup></Col>
+                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
+                            <label>Maximum Market Cap</label>
+                            <FormInput placeholder="A very very high number!" value={this.state.mktcapHighQuery} onChange={this.handleMktcapMaxChange} />
                         </FormGroup></Col>
                         <Col flex={2}><FormGroup style={{ width: '10vw' }}>
                             <Button style={{ marginTop: '4vh' }} onClick={this.updateSearchResults}>Search</Button>
                         </FormGroup></Col>
                     </Row>
+                    <Divider />
+                    <Table dataSource={this.state.companiesResults} columns={companyColumns} pagination={{ pageSizeOptions:[10, 50], defaultPageSize: 10, showQuickJumper:true }} style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}/>
                 </Form>
-                <Divider />
-                <Table dataSource={this.state.companiesResults} columns={companyColumns} pagination={{ pageSizeOptions:[10, 50], defaultPageSize: 10, showQuickJumper:true }} style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}/>
-                
             </div>
         )
     }
