@@ -2,7 +2,8 @@ import React from 'react';
 import {
   Table,
   Pagination,
-  Select
+  Select,
+  Switch
 } from 'antd'
 
 import MenuBar from '../components/MenuBar';
@@ -100,7 +101,7 @@ class CompanyJobsPage extends React.Component {
     
 }
 
-    //this.leagueOnChange = this.leagueOnChange.bind(this)
+    this.leagueOnChange = this.leagueOnChange.bind(this)
     //this.goToMatch = this.goToMatch.bind(this)
 }
   
@@ -109,13 +110,14 @@ class CompanyJobsPage extends React.Component {
     window.location = `/matches?id=${matchId}`
 }*/
 
-  /*leagueOnChange(value) {
+  leagueOnChange() {
     // TASK 2: this value should be used as a parameter to call getCompanyJobs in fetcher.js with the parameters page and pageSize set to null
     // then, companyJobResults in state should be set to the results returned - see a similar function call in componentDidMount()
-    getCompanyJobs(null, null, value).then(res => {
-      this.setState({ companyJobResults: res.results })
-  })
-}*/
+    //getCompanyJobs(null, null, value).then(res => {
+    //  this.setState({ companyJobResults: res.results })
+  //})
+  console.log("Something is executing")
+}
 
   componentDidMount() {
     //const symbol = this.props.match.params.symbol;
@@ -140,7 +142,8 @@ class CompanyJobsPage extends React.Component {
       <div>
         
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
-          <h3>Jobs by {this.state.symbol} and Peers</h3>
+          <h3>Jobs by {this.state.symbol}</h3>
+          <h5> Jobs by Peers: <Switch checkedChildren="On" unCheckedChildren="Off" defaultChecked onChange={this.leagueOnChange} /></h5>
           <Table dataSource={this.state.companyJobResults} columns={companyJobColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
         </div>
       </div>
