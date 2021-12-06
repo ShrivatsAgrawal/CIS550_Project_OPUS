@@ -204,9 +204,13 @@ async function company_news(req, res) {
         const pagesize = req.query.pagesize ? req.query.pagesize : 10;
         const offset = (page-1)*pagesize;
         connection.query(`WITH Temp AS (
-            WITH T1 AS (SELECT DISTINCT peerID
+            SELECT DISTINCT peerID, 'PEER' as cmpRel
             FROM Peers
-            WHERE symbol LIKE '%${company}%' or peerID LIKE '%${company}%')
+            WHERE symbol LIKE '${company}'
+                UNION
+            SELECT DISTINCT peerID, 'SELF' as cmpRel
+            FROM Peers
+            WHERE peerID LIKE '${company}')
             SELECT *
             FROM CompanyNews CN JOIN T1 ON CN.symbol = T1.peerID
             ORDER BY publishedDate DESC)
@@ -216,7 +220,8 @@ async function company_news(req, res) {
                    image,
                    site,
                    text,
-                   url
+                   url,
+                   cmpRel
             FROM Temp
             ORDER BY publishedDate DESC
             LIMIT ${offset}, ${pagesize};`, function (error, results, fields) {
@@ -229,16 +234,21 @@ async function company_news(req, res) {
         });
     } else {
         console.log("secondd")
-        connection.query(`WITH T1 AS (SELECT DISTINCT peerID
-            FROM Peers
-            WHERE symbol LIKE '%${company}%' or peerID LIKE '%${company}%')
+        connection.query(`WITH T1 AS (SELECT DISTINCT peerID, 'PEER' as cmpRel
+        FROM Peers
+        WHERE symbol LIKE '${company}'
+            UNION
+        SELECT DISTINCT peerID, 'SELF' as cmpRel
+        FROM Peers
+        WHERE peerID LIKE '${company}')
         SELECT symbol, 
                publishedDate,
                title,
                image,
                site,
                text,
-               url
+               url,
+               cmpRel
         FROM CompanyNews CN JOIN T1 ON CN.symbol = T1.peerID
         ORDER BY publishedDate DESC 
         LIMIT 10;`, function (error, results, fields) {
