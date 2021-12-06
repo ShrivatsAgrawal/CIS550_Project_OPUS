@@ -14,6 +14,7 @@ import "shards-ui/dist/css/shards.min.css"
 import CompanyJobsPage from './pages/CompanyJobsPage';
 import CompanyInfoPage from './pages/CompanyInfoPage';
 import CompanySentimentPage from './pages/CompanySentimentPage';
+import CompanyNewsPage from './pages/CompanyNewsPage';
 import SearchJobsPage from './pages/SearchJobs'
 import HomeCompanySearch from './pages/HomeCompanySearch'
 
@@ -50,8 +51,12 @@ ReactDOM.render(
 							render={() => (
 								<HomeCompanySearch />
 							)}/>
-
+		<Route exact
 		
+							path="/company/news/:symbol"
+							render={() => (
+								<CompanyNewsPage />
+							)}/>
       </Switch>
     </Router>
   </div>,

@@ -5,154 +5,122 @@ import {
   Select
 } from 'antd'
 
+ import { Form, FormInput, FormGroup, Button, Card, CardBody, CardTitle, CardText, Progress ,CardImg, CardSubtitle} from "shards-react";
+
+
 import MenuBar from '../components/MenuBar';
-import { getCompanyNews} from '../fetcher'
+import { getCompanyNews } from '../fetcher'
+import { useParams } from 'react-router-dom';
 const { Column, ColumnGroup } = Table;
-const { Option } = Select;
 
 
-const newsColumns = [
-  {
-      title: 'Symbol',
-      dataIndex: 'Symbol',
-      key: 'Symbol',
-      sorter: (a, b) => a.Symbol.localeCompare(b.Symbol),
-      
+const companyNewsColumns = [
+{
+    title: 'Symbol',
+    dataIndex: 'symbol',
+    key: 'symbol',
+    sorter: (a, b) => a.symbol.localeCompare(b.symbol)
 },
 {
-    title: 'publishedDate',
+    title: 'PublishedDate',
     dataIndex: 'publishedDate',
     key: 'publishedDate',
-    sorter: (a, b) => a.publishedDate - b.publishedDate
+    sorter: (a, b) => a.publishedDate.localeCompare(b.publishedDate)
 },
 {
-    title: 'Rating',
-    dataIndex: 'Rating',
-    key: 'Rating',
-    sorter: (a, b) => a.Rating - b.Rating
+    title: 'Title',
+    dataIndex: 'title',
+    key: 'title',
+    sorter: (a, b) => a.title.localeCompare(b.title),
+    
     
 },
-  // TASK 7: add a column for Potential, with the ability to (numerically) sort ,
-  // TASK 8: add a column for Club, with the ability to (alphabetically) sort 
-  // TASK 9: add a column for Value - no sorting required
 {
-  title: 'Potential',
-  dataIndex: 'Potential',
-  key: 'Potential',
-  sorter: (a, b) => a.Potential - b.Potential
+  title: 'Image',
+  dataIndex: 'image',
+  key: 'image',
+  
+},{
+  title: 'Site',
+  dataIndex: 'site',
+  key: 'site',
+  
   
 },
 {
-  title: 'Club',
-  dataIndex: 'Club',
-  key: 'Club',
-  sorter: (a, b) => a.Club.localeCompare(b.Club)
+  title: 'Text',
+  dataIndex: 'text',
+  key: 'text',
+  
   
 },
 {
-  title: 'Value',
-  dataIndex: 'Value',
-  key: 'Value',
+  title: 'Url',
+  dataIndex: 'url',
+  key: 'url',
+ 
+ 
+ render: (text, row) => <a href={row.url}>{}</a>
   
-  
-},
-
+}
 ];
 
-class HomePage extends React.Component {
+   
+class CompanyNewsPage extends React.Component {
 
+  
   constructor(props) {
     super(props)
-
     this.state = {
-    matchesResults: [],
-    matchesPageNumber: 1,
-    matchesPageSize: 10,
-    playersResults: [],
-    pagination: null  
+    companyNewsResults: [],
+    companyNewsPageNumber: 1,
+    companyNewsPageSize: 12,
+    pagination: null,
+    companyTitle:''
+    
 }
-
-    this.leagueOnChange = this.leagueOnChange.bind(this)
-    this.goToMatch = this.goToMatch.bind(this)
-}
-
-
-  goToMatch(matchId) {
-    window.location = `/matches?id=${matchId}`
-}
-
-  leagueOnChange(value) {
-    // TASK 2: this value should be used as a parameter to call getAllMatches in fetcher.js with the parameters page and pageSize set to null
-    // then, matchesResults in state should be set to the results returned - see a similar function call in componentDidMount()
-    getAllMatches(null, null, value).then(res => {
-      this.setState({ matchesResults: res.results })
-  })
 }
 
   componentDidMount() {
-    getAllMatches(null, null, 'D1').then(res => {
-      this.setState({ matchesResults: res.results })
-})
-
-    getAllPlayers().then(res => {
+    
+    getCompanyNews(null,null,'a').then(res => {
+      
       console.log(res.results)
-      // TASK 1: set the correct state attribute to res.results
-      this.setState({ playersResults:res.results})
+      this.setState({ companyNewsResults: res.results})
+      
 })
 
- 
 }
-
 
   render() {
 
     return (
-      <div>
-        <MenuBar />
-        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
-          <h3>Players</h3>
-          <Table dataSource={this.state.playersResults} columns={playerColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
-        </div>
-        <div style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}>
-          <h3>Matches</h3>
-          <Select defaultValue="D1" style={{ width: 120 }} onChange={this.leagueOnChange}>
-            <Option value="D1">Bundesliga</Option>
-             {/* TASK 3: Take a look at Dataset Information.md from MS1 and add other options to the selector here  */}
-             <Option value="SP1">La Liga</Option>
-            <Option value="F1">Ligue 1</Option>
-            <Option value="I1">Serie A</Option>
-            <Option value="E0">Premier League</Option>
-            
-          </Select>
+      <div>        
+       <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
+          <h3>News</h3>
+          {this.state.companyNewsResults.map(({title,image,text,url,site,publishedDate})=>{
+            return (
+        <Card className="card-style" onClick={()=>{}}>
+        <CardBody>
+        <CardTitle ><a href={url}>{title}</a></CardTitle>
+        <CardSubtitle>Source: {site}</CardSubtitle> 
+        <CardImg src={image} />
+        <CardSubtitle>{publishedDate}</CardSubtitle> 
+        <CardText>{text}</CardText>
+        
+        </CardBody>
+        </Card>  
+            )
+          })}
           
-          <Table onRow={(record, rowIndex) => {
-    return {
-      onClick: event => {this.goToMatch(record.MatchId)}, // clicking a row takes the user to a detailed view of the match in the /matches page using the MatchId parameter  
-    };
-  }} dataSource={this.state.matchesResults} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}>
-            <ColumnGroup title="Teams">
-              {/* TASK 4: correct the title for the 'Home' column and add a similar column for 'Away' team in this ColumnGroup */}
-              <Column title="Home" dataIndex="Home" key="Home" sorter= {(a, b) => a.Home.localeCompare(b.Home)}/>
-              <Column title="Away" dataIndex="Away" key="Away" sorter= {(a, b) => a.Away.localeCompare(b.Away)}/>
-            </ColumnGroup>
-            <ColumnGroup title="Goals">
-              {/* TASK 5: add columns for home and away goals in this ColumnGroup, with the ability to sort values in these columns numerically */}
-             <Column title="HomeGoals" dataIndex="HomeGoals" key="HomeGoals" sorter= {(a, b) => a.HomeGoals - b.HomeGoals}/>
-              <Column title="AwayGoals" dataIndex="AwayGoals" key="AwayGoals" sorter= {(a, b) => a.AwayGoals - b.AwayGoals}/>
-            </ColumnGroup>
-             {/* TASK 6: create two columns (independent - not in a column group) for the date and time. Do not add a sorting functionality */}
-             <Column title="Date" dataIndex="Date" key="Date" />
-             <Column title="Time" dataIndex="Time" key="Time" />
-          </Table>
+               
 
-        </div>
-
-
+          </div>
       </div>
     )
   }
 
 }
 
-export default HomePage
+export default CompanyNewsPage
 

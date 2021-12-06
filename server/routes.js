@@ -73,19 +73,28 @@ async function company_sentiment(req, res) {
     if (req.params.symbol) {
         var company = req.params.symbol
         connection.query(`WITH T1 AS (SELECT DISTINCT peerID as ID
-            FROM Peers
-            WHERE symbol = '${company}' or peerID = '${company}'),
-            T2 AS (SELECT C.companyName, C.symbol, T1.ID
-            FROM CompanyInformation C JOIN T1 ON C.symbol = T1.ID),
-            T3 AS (SELECT S.sentiment, T1.ID
-            FROM CompanySentiments S JOIN T1 ON S.symbol = T1.ID),
-            T4 AS (SELECT 'Average of peers' AS companyName, 'AVG' AS symbol, AVG(S.sentiment) as sentiment
-            FROM CompanySentiments S JOIN T1 ON S.symbol = T1.ID
-            WHERE T1.ID != '${company}')
-            SELECT * FROM T4
-            UNION ALL
-            SELECT T2.companyName, T2.symbol, T3.sentiment
-            FROM T2 JOIN T3 ON T2.ID = T3.ID;`, function (error, results, fields) {
+        FROM Peers
+        WHERE symbol = '${company}' or peerID = '${company}'),
+        T2 AS (SELECT C.companyName, C.symbol, T1.ID, 2 as ord
+        FROM CompanyInformation C JOIN T1 ON C.symbol = T1.ID
+        WHERE symbol != '${company}'),
+        T3 AS (SELECT C.companyName, C.symbol, T1.ID, 0 as ord
+        FROM CompanyInformation C JOIN T1 ON C.symbol = T1.ID
+        WHERE symbol = '${company}'),
+        T23 AS (SELECT *
+        FROM T2 UNION ALL
+        SELECT *
+        FROM T3),
+        T4 AS (SELECT S.sentiment, S.relativeIndex, T1.ID
+        FROM CompanySentiments S JOIN T1 ON S.symbol = T1.ID),
+        T5 AS (SELECT 'Average of peers' AS companyName, 'AVG' AS symbol, AVG(S.sentiment) as sentiment, AVG(S.absoluteIndex) as relativeIndex, 1 as ord
+        FROM CompanySentiments S JOIN T1 ON S.symbol = T1.ID
+        WHERE T1.ID != '${company}')
+        SELECT * FROM T5
+        UNION ALL
+        SELECT T23.companyName, T23.symbol, T4.sentiment, T4.relativeIndex, T23.ord
+        FROM T23 JOIN T4 ON T23.ID = T4.ID
+        ORDER BY ord;`, function (error, results, fields) {
             if (error) {
                 console.log(error)
                 res.json({ error: error })
@@ -100,7 +109,6 @@ async function company_sentiment(req, res) {
 
 async function company_jobs(req, res) {
     var company = req.params.symbol?req.params.symbol : '%';
-    
     if (req.query.page && !isNaN(req.query.page)) {
         const page = req.query.page;
         const pagesize = req.query.pagesize ? req.query.pagesize : 10;
@@ -196,9 +204,13 @@ async function company_news(req, res) {
         const pagesize = req.query.pagesize ? req.query.pagesize : 10;
         const offset = (page-1)*pagesize;
         connection.query(`WITH Temp AS (
-            WITH T1 AS (SELECT DISTINCT peerID
+            SELECT DISTINCT peerID, 'PEER' as cmpRel
             FROM Peers
-            WHERE symbol LIKE '%${company}%' or peerID LIKE '%${company}%')
+            WHERE symbol LIKE '${company}'
+                UNION
+            SELECT DISTINCT peerID, 'SELF' as cmpRel
+            FROM Peers
+            WHERE peerID LIKE '${company}')
             SELECT *
             FROM CompanyNews CN JOIN T1 ON CN.symbol = T1.peerID
             ORDER BY publishedDate DESC)
@@ -208,7 +220,8 @@ async function company_news(req, res) {
                    image,
                    site,
                    text,
-                   url
+                   url,
+                   cmpRel
             FROM Temp
             ORDER BY publishedDate DESC
             LIMIT ${offset}, ${pagesize};`, function (error, results, fields) {
@@ -220,16 +233,22 @@ async function company_news(req, res) {
             }
         });
     } else {
-        connection.query(`WITH T1 AS (SELECT DISTINCT peerID
-            FROM Peers
-            WHERE symbol LIKE '%${company}%' or peerID LIKE '%${company}%')
+        console.log("secondd")
+        connection.query(`WITH T1 AS (SELECT DISTINCT peerID, 'PEER' as cmpRel
+        FROM Peers
+        WHERE symbol LIKE '${company}'
+            UNION
+        SELECT DISTINCT peerID, 'SELF' as cmpRel
+        FROM Peers
+        WHERE peerID LIKE '${company}')
         SELECT symbol, 
                publishedDate,
                title,
                image,
                site,
                text,
-               url
+               url,
+               cmpRel
         FROM CompanyNews CN JOIN T1 ON CN.symbol = T1.peerID
         ORDER BY publishedDate DESC 
         LIMIT 10;`, function (error, results, fields) {
@@ -329,7 +348,7 @@ async function company_info(req, res) {
     var company = req.params.symbol? req.params.symbol : '%';
     connection.query(`SELECT *
     FROM CompanyInformation
-    WHERE symbol LIKE '${company}';` ,function (error, results, fields) {
+    WHERE symbol LIKE '%${company}%';` ,function (error, results, fields) {
         if (error) {
             console.log(error)
             res.json({ error: error })
