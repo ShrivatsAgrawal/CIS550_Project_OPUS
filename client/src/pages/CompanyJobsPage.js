@@ -65,8 +65,7 @@ const companyJobColumns = [
 {
   title: 'Salary',
   dataIndex: 'salary',
-  key: 'salary',
-  sorter: (a, b) => a.salary.localeCompare(b.salary),
+  key: 'salary'
   
 },
 {
@@ -93,6 +92,7 @@ class CompanyJobsPage extends React.Component {
     const symbol  = this.props.match.params.symbol;
     this.state = {
     companyJobResults: [],
+    allJobResults: [],
     companyJobsPageNumber: 1,
     companyJobsPageSize: 10000,
     pagination: null ,
@@ -101,7 +101,7 @@ class CompanyJobsPage extends React.Component {
     
 }
 
-    this.leagueOnChange = this.leagueOnChange.bind(this)
+    this.peerOnChange = this.peerOnChange.bind(this)
     //this.goToMatch = this.goToMatch.bind(this)
 }
   
@@ -110,13 +110,14 @@ class CompanyJobsPage extends React.Component {
     window.location = `/matches?id=${matchId}`
 }*/
 
-  leagueOnChange() {
-    // TASK 2: this value should be used as a parameter to call getCompanyJobs in fetcher.js with the parameters page and pageSize set to null
-    // then, companyJobResults in state should be set to the results returned - see a similar function call in componentDidMount()
-    //getCompanyJobs(null, null, value).then(res => {
-    //  this.setState({ companyJobResults: res.results })
-  //})
-  console.log("Something is executing")
+  peerOnChange(value) {
+    
+  if (value){
+    this.setState({companyJobResults : this.state.allJobResults})
+  console.log(`Something is executing ${value}`)}
+  else {
+    this.setState( {companyJobResults : this.state.allJobResults.filter(item => item.cmpType == "SELF")})
+  }
 }
 
   componentDidMount() {
@@ -124,15 +125,11 @@ class CompanyJobsPage extends React.Component {
     getCompanyJobs(this.state.companyJobsPageNumber, this.state.companyJobsPageSize, this.state.symbol).then(res => {
       console.log(res)
         //console.log("Symbol:"+this.state.symbol)
-      this.setState({ companyJobResults: res.results})
+      this.setState({ companyJobResults: res.results , allJobResults : res.results})
       
 })
-/*
-    getAllPlayers().then(res => {
-      console.log(res.results)
-      // TASK 1: set the correct state attribute to res.results
-      this.setState({ playersResults:res.results})
-})*/
+
+
 }
 
 
@@ -142,8 +139,9 @@ class CompanyJobsPage extends React.Component {
       <div>
         
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
-          <h3>Jobs by {this.state.symbol}</h3>
-          <h5> Jobs by Peers: <Switch checkedChildren="On" unCheckedChildren="Off" defaultChecked onChange={this.leagueOnChange} /></h5>
+          <h3>Jobs by {this.state.symbol}</h3> 
+          <br />
+          <h5>Jobs by Peers <Switch checkedChildren="On" unCheckedChildren="Off" defaultChecked onChange={this.peerOnChange} /></h5>
           <Table dataSource={this.state.companyJobResults} columns={companyJobColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
         </div>
       </div>
