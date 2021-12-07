@@ -100,7 +100,7 @@ peerOnChange(value) {
 
   componentDidMount() {
     
-    getCompanyNews(this.state.companyJobsPageNumber, this.state.companyJobsPageSize,this.state.symbol).then(res => {
+    getCompanyNews(this.state.companyNewsPageNumber, this.state.companyNewsPageSize,this.state.symbol).then(res => {
       
       console.log(res.results)
       this.setState({ companyNewsResults: res.results, allNewsResults : res.results})
