@@ -2,7 +2,8 @@ import React from 'react';
 import {
   Table,
   Pagination,
-  Select
+  Select,
+  Switch
 } from 'antd'
 
  import { Form, FormInput, FormGroup, Button, Card, CardBody, CardTitle, CardText, Progress ,CardImg, CardSubtitle} from "shards-react";
@@ -12,6 +13,7 @@ import MenuBar from '../components/MenuBar';
 import { getCompanyNews } from '../fetcher'
 import { useParams } from 'react-router-dom';
 const { Column, ColumnGroup } = Table;
+const { Option } = Select;
 
 
 const companyNewsColumns = [
@@ -74,13 +76,26 @@ class CompanyNewsPage extends React.Component {
     const { symbol } = this.props.match.params;
     this.state = {
     companyNewsResults: [],
+    allNewsResults: [],
     companyNewsPageNumber: 1,
-    companyNewsPageSize: 12,
+    companyNewsPageSize: 10000,
     pagination: null,
     companyTitle:'',
     symbol: symbol
     
 }
+this.peerOnChange = this.peerOnChange.bind(this)
+}
+
+peerOnChange(value) {
+    
+  if (value){
+    this.setState({companyNewsResults : this.state.allNewsResults})
+  //console.log(`Something is executing ${value}`)
+            }
+  else {
+    this.setState( {companyNewsResults : this.state.allNewsResults.filter(item => item.cmpRel == "SELF")})
+  }
 }
 
   componentDidMount() {
@@ -88,7 +103,7 @@ class CompanyNewsPage extends React.Component {
     getCompanyNews(this.state.companyJobsPageNumber, this.state.companyJobsPageSize,this.state.symbol).then(res => {
       
       console.log(res.results)
-      this.setState({ companyNewsResults: res.results})
+      this.setState({ companyNewsResults: res.results, allNewsResults : res.results})
       
 })
 
@@ -100,12 +115,15 @@ class CompanyNewsPage extends React.Component {
       <div>        
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
           <h3>News</h3>
-          {this.state.companyNewsResults.map(({title,image,text,url,site,publishedDate})=>{
+          <h5>News by Peers <Switch checkedChildren="On" unCheckedChildren="Off" defaultChecked onChange={this.peerOnChange} /></h5>
+  
+          {this.state.companyNewsResults.map(({title,image,text,url,site,publishedDate,cmpRel})=>{
             return (
         <Card className="card-style" onClick={()=>{}}>
         <CardBody>
         <CardTitle ><a href={url}>{title}</a></CardTitle>
-        <CardSubtitle>Source: {site}</CardSubtitle> 
+        <CardSubtitle>Source: {site}</CardSubtitle>
+        
         <CardImg src={image} />
         <CardSubtitle>{publishedDate}</CardSubtitle> 
         <CardText>{text}</CardText>
