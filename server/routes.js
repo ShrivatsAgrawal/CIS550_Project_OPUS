@@ -282,24 +282,26 @@ async function all_companies(req, res) {
     if (req.query.page && !isNaN(req.query.page)) {
         // This is the case where page is defined.
         
-        connection.query(`WITH tmp1 AS
+        connection.query(`WITH cmp_info AS
         (SELECT symbol, companyName, fullTimeEmployees, mktCap
         FROM CompanyInformation
         WHERE companyName LIKE '%${cmpName}%' and
         fullTimeEmployees BETWEEN ${numEmployeesLow} AND ${numEmployeesHigh}
         AND mktCap BETWEEN ${mktcapLow} AND ${mktcapHigh}),
-        tmp2 AS (SELECT s.symbol, tmp1.companyName, tmp1.fullTimeEmployees, tmp1.mktCap, s.sentiment
+    sentiment AS
+        (SELECT symbol as symbol, sentiment
         FROM CompanySentiments s
-        JOIN tmp1
-        ON tmp1.symbol= s.symbol
         WHERE sentiment BETWEEN ${sentiLow} AND ${sentiHigh})
-        SELECT *, COUNT(jobLink) as JobCount
-        FROM IndeedJobs i
-        JOIN tmp2
-        ON tmp2.symbol=i.companySymbol
-        GROUP BY i.companySymbol
-        HAVING COUNT(jobLink)> ${jobNum}
-        LIMIT ${pagesize} OFFSET ${offset};`, function (error, results, fields) {
+    ,jobs AS
+        (SELECT companySymbol as symbol ,COUNT(jobLink) as JobCount, max(companyRating) as companyRating
+        FROM IndeedJobs
+        GROUP BY companySymbol
+        HAVING COUNT(jobLink)>= ${jobNum})
+    SELECT C.symbol as companySymbol, companyName, fullTimeEmployees, mktCap, sentiment, JobCount, companyRating
+    FROM cmp_info C LEFT JOIN sentiment S ON C.symbol=S.symbol
+    LEFT JOIN jobs J ON C.symbol=J.symbol
+    ORDER BY fullTimeEmployees DESC
+    LIMIT ${pagesize} OFFSET ${offset};`, function (error, results, fields) {
 
             if (error) {
                 console.log(error)
@@ -311,23 +313,25 @@ async function all_companies(req, res) {
    
     } else {
         
-        connection.query(`WITH tmp1 AS
+        connection.query(`WITH cmp_info AS
         (SELECT symbol, companyName, fullTimeEmployees, mktCap
         FROM CompanyInformation
         WHERE companyName LIKE '%${cmpName}%' and
         fullTimeEmployees BETWEEN ${numEmployeesLow} AND ${numEmployeesHigh}
         AND mktCap BETWEEN ${mktcapLow} AND ${mktcapHigh}),
-        tmp2 AS (SELECT s.symbol, tmp1.companyName, tmp1.fullTimeEmployees, tmp1.mktCap, s.sentiment
+    sentiment AS
+        (SELECT symbol as symbol, sentiment
         FROM CompanySentiments s
-        JOIN tmp1
-        ON tmp1.symbol= s.symbol
         WHERE sentiment BETWEEN ${sentiLow} AND ${sentiHigh})
-        SELECT *, COUNT(jobLink) as JobCount
-        FROM IndeedJobs i
-        JOIN tmp2
-        ON tmp2.symbol=i.companySymbol
-        GROUP BY i.companySymbol
-        HAVING COUNT(jobLink)> ${jobNum}`, function (error, results, fields) {
+    ,jobs AS
+        (SELECT companySymbol as symbol ,COUNT(jobLink) as JobCount, max(companyRating) as companyRating
+        FROM IndeedJobs
+        GROUP BY companySymbol
+        HAVING COUNT(jobLink)>= ${jobNum})
+    SELECT C.symbol as companySymbol, companyName, fullTimeEmployees, mktCap, sentiment, JobCount, companyRating
+    FROM cmp_info C LEFT JOIN sentiment S ON C.symbol=S.symbol
+    LEFT JOIN jobs J ON C.symbol=J.symbol
+    ORDER BY fullTimeEmployees DESC;`, function (error, results, fields) {
 
             if (error) {
                 console.log(error)
