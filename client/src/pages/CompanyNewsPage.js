@@ -14,58 +14,9 @@ import { getCompanyNews } from '../fetcher'
 import { useParams } from 'react-router-dom';
 const { Column, ColumnGroup } = Table;
 const { Option } = Select;
+const numEachPage =4
 
 
-const companyNewsColumns = [
-{
-    title: 'Symbol',
-    dataIndex: 'symbol',
-    key: 'symbol',
-    sorter: (a, b) => a.symbol.localeCompare(b.symbol)
-},
-{
-    title: 'PublishedDate',
-    dataIndex: 'publishedDate',
-    key: 'publishedDate',
-    sorter: (a, b) => a.publishedDate.localeCompare(b.publishedDate)
-},
-{
-    title: 'Title',
-    dataIndex: 'title',
-    key: 'title',
-    sorter: (a, b) => a.title.localeCompare(b.title),
-    
-    
-},
-{
-  title: 'Image',
-  dataIndex: 'image',
-  key: 'image',
-  
-},{
-  title: 'Site',
-  dataIndex: 'site',
-  key: 'site',
-  
-  
-},
-{
-  title: 'Text',
-  dataIndex: 'text',
-  key: 'text',
-  
-  
-},
-{
-  title: 'Url',
-  dataIndex: 'url',
-  key: 'url',
- 
- 
- render: (text, row) => <a href={row.url}>{}</a>
-  
-}
-];
 
    
 class CompanyNewsPage extends React.Component {
@@ -75,6 +26,8 @@ class CompanyNewsPage extends React.Component {
     super(props)
     const { symbol } = this.props.match.params;
     this.state = {
+      minValue: 0,
+      maxValue: 9,
     companyNewsResults: [],
     allNewsResults: [],
     companyNewsPageNumber: 1,
@@ -86,6 +39,19 @@ class CompanyNewsPage extends React.Component {
 }
 this.peerOnChange = this.peerOnChange.bind(this)
 }
+handleChange = value => {
+  if (value <= 1) {
+    this.setState({
+      minValue: 0,
+      maxValue: 9
+    });
+  } else {
+    this.setState({
+      minValue: this.state.maxValue,
+      maxValue: value * 9
+    });
+  }
+};
 
 peerOnChange(value) {
     
@@ -117,21 +83,38 @@ peerOnChange(value) {
           <h3>News</h3>
           <h5>News by Peers <Switch checkedChildren="On" unCheckedChildren="Off" defaultChecked onChange={this.peerOnChange} /></h5>
   
-          {this.state.companyNewsResults.map(({title,image,text,url,site,publishedDate,cmpRel})=>{
-            return (
-        <Card className="card-style" onClick={()=>{}}>
-        <CardBody>
-        <CardTitle ><a href={url}>{title}</a></CardTitle>
-        <CardSubtitle>Source: {site}</CardSubtitle>
-        
-        <CardImg src={image} />
-        <CardSubtitle>{publishedDate}</CardSubtitle> 
-        <CardText>{text}</CardText>
-        
-        </CardBody>
-        </Card>  
-            )
-          })}
+          {this.state.companyNewsResults &&
+          this.state.companyNewsResults.length > 0 &&
+          this.state.companyNewsResults.slice(this.state.minValue, this.state.maxValue).map(({title,image,text,url,site,publishedDate,cmpRel}) => (
+            <Card style={{
+              display: "inline-block",
+              margin: "0 2px",
+              transform: "scale(0.95)",
+             
+                borderWidth: 50, 
+                shadowColor: 'red', 
+                shadowOffset: { height: 3, width: 1 },
+                shadowOpacity: 0.9,
+                shadowRadius: 0.0,
+            }} onClick={()=>{}}>
+            <CardBody>
+            <CardTitle ><a href={url}>{title}</a><br></br></CardTitle>
+            <CardSubtitle><br></br>Source: {site}</CardSubtitle>
+            <CardImg src={image} />
+            <CardSubtitle>{publishedDate}</CardSubtitle> 
+            <CardText>{text}</CardText>
+            
+            </CardBody>
+            </Card> 
+    
+          ))}
+          <Pagination style={{textAlign: "center"
+            }} 
+          defaultCurrent={1}
+          defaultPageSize={numEachPage} //default size of page
+          onChange={this.handleChange}
+          total={this.state.companyNewsResults.length} //total number of card data available
+        />
           
                
 
