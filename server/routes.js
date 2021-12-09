@@ -203,7 +203,7 @@ async function company_news(req, res) {
         const page = req.query.page;
         const pagesize = req.query.pagesize ? req.query.pagesize : 10;
         const offset = (page-1)*pagesize;
-        connection.query(`WITH Temp AS (
+        connection.query(`WITH Temp AS ( WITH T1 AS (
             SELECT DISTINCT peerID, 'PEER' as cmpRel
             FROM Peers
             WHERE symbol LIKE '${company}'
