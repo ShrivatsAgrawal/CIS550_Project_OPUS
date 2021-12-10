@@ -86,8 +86,8 @@ class CompanySentimentPage extends React.Component {
 
     return (
       <div>
+      <MenuBar symbol={this.state.symbol}/>
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
-          <Menubar symbol={this.state.symbol}/>
           <Divider>Company Sentiment for {this.state.companyName}</Divider>
           <p>Sentiment: what people think of this company<Progress percent={Math.trunc(this.state.companySentimentResults * 100)}/></p>
           <p>Popularity: how much people talk about this company<Progress percent={Math.trunc(this.state.companyIndex * 100)}/></p>
