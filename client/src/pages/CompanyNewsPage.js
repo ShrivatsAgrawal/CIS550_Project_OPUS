@@ -78,7 +78,8 @@ peerOnChange(value) {
   render() {
 
     return (
-      <div>        
+      <div>  
+       <MenuBar symbol={this.state.symbol}/>      
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
           <h3>News</h3>
           <h5>News by Peers <Switch checkedChildren="On" unCheckedChildren="Off" defaultChecked onChange={this.peerOnChange} /></h5>
