@@ -138,8 +138,7 @@ class CompanyJobsPage extends React.Component {
 
     return (
       <div>
-        
-
+       <MenuBar symbol={this.state.symbol}/>
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
           <h3>Jobs by {this.state.symbol}</h3> 
           <br />
