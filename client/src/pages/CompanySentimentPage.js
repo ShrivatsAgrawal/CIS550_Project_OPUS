@@ -86,39 +86,8 @@ class CompanySentimentPage extends React.Component {
 
     return (
       <div>
-       //menubar starts here 
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
-          <Navbar type="dark" theme="primary" expand="md">
-            <NavbarBrand href="/">CIS 550 OPUS</NavbarBrand>
-            <Nav navbar>
-              <NavItem>
-                <NavLink active href="/">
-                  Home
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink active href={"/company/info/"+this.state.symbol}>
-                  Info
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink active href={"/company/news/"+this.state.symbol}>
-                  News
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink active href={"/company/sentiment/"+this.state.symbol}>
-                  Sentiment
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink active  href={"/company/jobs/" +this.state.symbol}>
-                  Jobs
-                </NavLink>
-              </NavItem>
-            </Nav>
-          </Navbar>
-          //menubar ends here
+          <Menubar symbol={this.state.symbol}/>
           <Divider>Company Sentiment for {this.state.companyName}</Divider>
           <p>Sentiment: what people think of this company<Progress percent={Math.trunc(this.state.companySentimentResults * 100)}/></p>
           <p>Popularity: how much people talk about this company<Progress percent={Math.trunc(this.state.companyIndex * 100)}/></p>
