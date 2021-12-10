@@ -6,6 +6,8 @@ import {
 
 import { withRouter } from "react-router";
 import { getCompanyInfo } from '../fetcher'
+import MenuBar from '../components/MenuBar';
+
 
 function ImageLoader(props) {
     return (
@@ -37,6 +39,7 @@ class CompanyInfoPage extends React.Component {
         console.log(this.state.companyInfo);
         return (
             <div>
+            <MenuBar symbol={this.state.companyInfo.symbol}/>
             <Descriptions title="Company Information" bordered>
                 <Descriptions.Item label="Name">{this.state.companyInfo.companyName}</Descriptions.Item>
                 <Descriptions.Item label="Logo"><ImageLoader image={this.state.companyInfo.image}/></Descriptions.Item>
