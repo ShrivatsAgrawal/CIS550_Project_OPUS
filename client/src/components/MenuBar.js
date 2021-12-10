@@ -7,7 +7,7 @@ import {
     NavLink
   } from "shards-react";
 
-//to use: <MenuBar symbol={[symbol]}/>
+//to use: Import MenuBar from '../components/MenuBar'; <MenuBar symbol={[symbol]}/>
 
 function MenuBar(props){
     return(
