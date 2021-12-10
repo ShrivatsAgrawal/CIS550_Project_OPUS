@@ -138,7 +138,7 @@ class SearchJobsPage extends React.Component {
 
     return (
       <div>
-        
+       <MenuBar symbol={this.state.symbol}/>    
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
           <h3>Jobs by {this.state.symbol} and Peers</h3>
           <Table dataSource={this.state.companyJobResults} columns={companyJobColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
