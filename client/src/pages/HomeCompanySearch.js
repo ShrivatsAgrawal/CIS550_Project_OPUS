@@ -19,6 +19,7 @@ const companyColumns = [
         dataIndex: 'companySymbol',
         key: 'companySymbol',
         sorter: (a, b) => a.companySymbol.localeCompare(b.companySymbol)
+        render: (text, row) => <a href={`/company/info/${row.companySymbol}`}>{text}</a>
   },
   {
       title: 'Name',
