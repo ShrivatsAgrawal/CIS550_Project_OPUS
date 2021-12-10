@@ -300,7 +300,7 @@ async function all_companies(req, res) {
     SELECT C.symbol as companySymbol, companyName, fullTimeEmployees, mktCap, sentiment, JobCount, companyRating
     FROM cmp_info C LEFT JOIN sentiment S ON C.symbol=S.symbol
     LEFT JOIN jobs J ON C.symbol=J.symbol
-    ORDER BY fullTimeEmployees DESC
+    ORDER BY JobCount DESC
     LIMIT ${pagesize} OFFSET ${offset};`, function (error, results, fields) {
 
             if (error) {
@@ -331,7 +331,7 @@ async function all_companies(req, res) {
     SELECT C.symbol as companySymbol, companyName, fullTimeEmployees, mktCap, sentiment, JobCount, companyRating
     FROM cmp_info C LEFT JOIN sentiment S ON C.symbol=S.symbol
     LEFT JOIN jobs J ON C.symbol=J.symbol
-    ORDER BY fullTimeEmployees DESC;`, function (error, results, fields) {
+    ORDER BY JobCount DESC;`, function (error, results, fields) {
 
             if (error) {
                 console.log(error)
