@@ -26,7 +26,7 @@ const companyJobColumns = [
     dataIndex: 'jobCompany',
     key: 'jobCompany',
     sorter: (a, b) => a.jobCompany.localeCompare(b.jobCompany),
-    render: (text, row) => <a href={`${row.companyLink}`}>{text}</a>
+    render: (text, row) => <a href={`${row.companyLink}` } target={`_blank`}>{text}</a>
 },
 {
     title: 'Rating',
@@ -41,7 +41,7 @@ const companyJobColumns = [
   dataIndex: 'jobTitle',
   key: 'jobTitle',
   sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
-  render: (text, row) => <a href={`${row.jobLink}`}>{text}</a>
+  render: (text, row) => <a href={`${row.jobLink}`} target={`_blank`}>{text}</a>
   
 },
 {
@@ -72,7 +72,7 @@ const companyJobColumns = [
   title: 'More Jobs',
   dataIndex: 'searchLink',
   key: 'searchLink',
-  render: (text, row) => <a href={`${row.searchLink}`}>{text}</a>
+  render: (text, row) => <a href={`${row.searchLink}` } target={`_blank`}>Link</a>
   
 },
 {
@@ -142,7 +142,7 @@ class CompanyJobsPage extends React.Component {
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
           <h3>Jobs by {this.state.symbol}</h3> 
           <br />
-          <h5>Jobs by Peers <Switch checkedChildren="On" unCheckedChildren="Off" defaultChecked onChange={this.peerOnChange} /></h5>
+          <h5>Similar Jobs Recommendation <Switch checkedChildren="On" unCheckedChildren="Off" defaultChecked onChange={this.peerOnChange} /></h5>
           <Table dataSource={this.state.companyJobResults} columns={companyJobColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
         </div>
       </div>

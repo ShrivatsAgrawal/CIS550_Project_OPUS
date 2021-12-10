@@ -10,6 +10,7 @@ import {
     Slider
 } from 'antd'
 
+
 import { withRouter } from "react-router";
 import { getCompanies } from '../fetcher'
 
@@ -18,7 +19,7 @@ const companyColumns = [
         title: 'Symbol',
         dataIndex: 'companySymbol',
         key: 'companySymbol',
-        sorter: (a, b) => a.companySymbol.localeCompare(b.companySymbol)
+        sorter: (a, b) => a.companySymbol.localeCompare(b.companySymbol),
         render: (text, row) => <a href={`/company/info/${row.companySymbol}`}>{text}</a>
   },
   {
@@ -133,6 +134,15 @@ class HomeCompanySearch extends React.Component {
     render() {
         return (
             <div>
+            
+                <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '10vh'}}>
+    <h1> OPUS </h1>
+    
+                </div>
+                <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '0vh'}}>
+   
+    <h4>Helping Students Find Work</h4>
+                </div>
                 <Form style={{ width: '100vw', margin: '0 auto', marginTop: '5vh' }}>
                     <Row>
                         <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>

@@ -10,7 +10,7 @@ import {
 function MenuBar(props){
     return(
         <Navbar type="dark" theme="primary" expand="md">
-        <NavbarBrand>CIS 550 OPUS</NavbarBrand>
+        <NavbarBrand>OPUS</NavbarBrand>
         <Nav navbar>
           <NavItem>
             <NavLink active href="/">
