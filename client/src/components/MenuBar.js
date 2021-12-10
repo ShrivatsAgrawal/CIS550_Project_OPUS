@@ -7,8 +7,6 @@ import {
     NavLink
   } from "shards-react";
 
-//to use: Import MenuBar from '../components/MenuBar'; <MenuBar symbol={[symbol]}/>
-
 function MenuBar(props){
     return(
         <Navbar type="dark" theme="primary" expand="md">
@@ -17,6 +15,11 @@ function MenuBar(props){
           <NavItem>
             <NavLink active href="/">
               Home
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink active href="#" disabled style={{color:'black', fontWeight:'500'}}>
+            {props.symbol}:
             </NavLink>
           </NavItem>
           <NavItem>
@@ -41,7 +44,7 @@ function MenuBar(props){
           </NavItem>
           <NavItem>
             <NavLink active  href={"/search/jobs/" +props.symbol}>
-              Job Search
+              Jobs With Peers
             </NavLink>
           </NavItem>
         </Nav>
