@@ -47,11 +47,7 @@ function MenuBar(props){
               Jobs
             </NavLink>
           </NavItem>
-          <NavItem>
-            <NavLink active  href={"/search/jobs/" +props.symbol}>
-              Jobs With Peers
-            </NavLink>
-          </NavItem>
+          
         </Nav>
       </Navbar>
     )
