@@ -10,11 +10,16 @@ import {
 function MenuBar(props){
     return(
         <Navbar type="dark" theme="primary" expand="md">
-        <NavbarBrand href="/">CIS 550 OPUS</NavbarBrand>
+        <NavbarBrand>CIS 550 OPUS</NavbarBrand>
         <Nav navbar>
           <NavItem>
             <NavLink active href="/">
               Home
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink active href="/search/jobs/">
+              Job Search
             </NavLink>
           </NavItem>
           <NavItem>
