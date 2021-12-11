@@ -10,7 +10,14 @@ import {
     Slider
 } from 'antd'
 
-
+import {
+    Navbar,
+    NavbarBrand,
+    Nav,
+    NavItem,
+    NavLink
+  } from "shards-react";
+  
 import { withRouter } from "react-router";
 import { getCompanies } from '../fetcher'
 
@@ -20,14 +27,13 @@ const companyColumns = [
         dataIndex: 'companySymbol',
         key: 'companySymbol',
         sorter: (a, b) => a.companySymbol.localeCompare(b.companySymbol),
-        render: (text, row) => <a href={`/company/info/${row.companySymbol}`}>{text}</a>
+        render: (text, row) => <a href = {`/company/info/${row.companySymbol}`}>{text}</a>
   },
   {
       title: 'Name',
       dataIndex: 'companyName',
       key: 'companyName',
       sorter: (a, b) => a.jobCompany.localeCompare(b.jobCompany),
-      render: (text, row) => <a href = {`/company/info/${row.companySymbol}`}>{text}</a>
   },
   
   {
@@ -134,15 +140,21 @@ class HomeCompanySearch extends React.Component {
     render() {
         return (
             <div>
-            
-                <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '10vh'}}>
-    <h1> OPUS </h1>
-    
-                </div>
-                <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '0vh'}}>
-   
-    <h4>Helping Students Find Work</h4>
-                </div>
+            <Navbar type="dark" theme="primary" expand="md">
+              <NavbarBrand>CIS 550 OPUS</NavbarBrand>
+              <Nav navbar>
+                <NavItem>
+                  <NavLink active href="/">
+                    Search Companies
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink active href="/search/jobs/">
+                    Search Jobs
+                  </NavLink>
+                </NavItem>
+              </Nav>
+            </Navbar>
                 <Form style={{ width: '100vw', margin: '0 auto', marginTop: '5vh' }}>
                     <Row>
                         <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
