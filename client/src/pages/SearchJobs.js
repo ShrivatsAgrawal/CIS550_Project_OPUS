@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Table,
-  Pagination,
   Select
 } from 'antd'
 
@@ -18,7 +17,6 @@ const companyJobColumns = [
       dataIndex: 'companySymbol',
       key: 'companySymbol',
       sorter: (a, b) => a.companySymbol.localeCompare(b.companySymbol)//,
-      //render: (text, row) => <a href={`/players?id=${row.PlayerId}`}>{text}</a>
 },
 {
     title: 'Name',
@@ -96,41 +94,13 @@ class SearchJobsPage extends React.Component {
     companyJobsPageSize: 10000,
     pagination: null ,
     symbol:symbol
-    //symbol : symbol
-    
 }
-
-    //this.leagueOnChange = this.leagueOnChange.bind(this)
-    //this.goToMatch = this.goToMatch.bind(this)
 }
   
-
-  /*goToMatch(matchId) {
-    window.location = `/matches?id=${matchId}`
-}*/
-
-  /*leagueOnChange(value) {
-    // TASK 2: this value should be used as a parameter to call getCompanyJobs in fetcher.js with the parameters page and pageSize set to null
-    // then, companyJobResults in state should be set to the results returned - see a similar function call in componentDidMount()
-    getCompanyJobs(null, null, value).then(res => {
-      this.setState({ companyJobResults: res.results })
-  })
-}*/
-
   componentDidMount() {
-    //const symbol = this.props.match.params.symbol;
     getCompanyJobs(this.state.companyJobsPageNumber, this.state.companyJobsPageSize, this.state.symbol).then(res => {
-      console.log(res)
-        //console.log("Symbol:"+this.state.symbol)
       this.setState({ companyJobResults: res.results})
-      
 })
-/*
-    getAllPlayers().then(res => {
-      console.log(res.results)
-      // TASK 1: set the correct state attribute to res.results
-      this.setState({ playersResults:res.results})
-})*/
 }
 
 
@@ -150,4 +120,3 @@ class SearchJobsPage extends React.Component {
 }
 
 export default withRouter(SearchJobsPage)
-

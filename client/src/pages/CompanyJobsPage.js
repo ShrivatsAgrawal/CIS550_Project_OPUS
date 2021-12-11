@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Table,
-  Pagination,
   Select,
   Switch
 } from 'antd'
@@ -114,8 +113,7 @@ class CompanyJobsPage extends React.Component {
     
   if (value){
     this.setState({companyJobResults : this.state.allJobResults})
-  //console.log(`Something is executing ${value}`)
-            }
+  }
   else {
     this.setState( {companyJobResults : this.state.allJobResults.filter(item => item.cmpType == "SELF")})
   }
@@ -124,8 +122,6 @@ class CompanyJobsPage extends React.Component {
   componentDidMount() {
     //const symbol = this.props.match.params.symbol;
     getCompanyJobs(this.state.companyJobsPageNumber, this.state.companyJobsPageSize, this.state.symbol).then(res => {
-      console.log(res)
-        //console.log("Symbol:"+this.state.symbol)
       this.setState({ companyJobResults: res.results , allJobResults : res.results})
       
 })

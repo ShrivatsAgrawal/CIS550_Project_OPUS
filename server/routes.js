@@ -60,8 +60,8 @@ async function all_jobs(req, res) {
             res.json({ error: error })
         } else if (results) {
             res.json({ results: results })
-            console.log(req.query)
-            console.log(query_job)
+            // console.log(req.query)
+            // console.log(query_job)
 
         }
     });
@@ -172,7 +172,7 @@ async function company_jobs(req, res) {
         connection.query(queryJobs, function (error, results, fields) {
             if (error) {
                 console.log(error)
-                console.log(queryJobs)
+                // console.log(queryJobs)
                 res.json({ error: error })
             } else if (results) {
                 res.json({results: results})
@@ -233,7 +233,6 @@ async function company_news(req, res) {
             }
         });
     } else {
-        console.log("secondd")
         connection.query(`WITH T1 AS (SELECT DISTINCT peerID, 'PEER' as cmpRel
         FROM Peers
         WHERE symbol LIKE '${company}'

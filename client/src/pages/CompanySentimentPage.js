@@ -6,13 +6,6 @@ import {
   Divider,
   Progress
 } from 'antd'
-import {
-    Navbar,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink
-  } from "shards-react";
 
 import MenuBar from '../components/MenuBar';
 import { getCompanySentiment } from '../fetcher'

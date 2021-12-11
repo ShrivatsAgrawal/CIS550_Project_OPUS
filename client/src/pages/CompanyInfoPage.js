@@ -5,7 +5,7 @@ import {
 } from 'antd'
 
 import { withRouter } from "react-router";
-import { getCompanyInfo } from '../fetcher'
+import { getCompanyInfo, getCompanyPeers } from '../fetcher'
 import MenuBar from '../components/MenuBar';
 
 
@@ -23,7 +23,8 @@ class CompanyInfoPage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            companyInfo: Object
+            companyInfo: Object,
+            companyPeers: Array
         }
     }
 
@@ -33,10 +34,13 @@ class CompanyInfoPage extends React.Component {
         getCompanyInfo(symbol).then(res => {
             this.setState({ companyInfo: res.results[0] })
         })
+
+        getCompanyPeers(symbol).then(res => {
+            this.setState({ companyPeers: res.results[0] })
+        })
     }
 
     render() {
-        console.log(this.state.companyInfo);
         return (
             <div>
             <MenuBar symbol={this.state.companyInfo.symbol}/>
@@ -86,7 +90,12 @@ class CompanyInfoPage extends React.Component {
             <br/>
             <Descriptions title="Official Description of the Company">
                 <Descriptions.Item>{this.state.companyInfo.description}</Descriptions.Item>
-            </Descriptions>         
+            </Descriptions>
+            <br/>
+            <div style={{display: 'flex',  justifyContent:'left', alignItems:'center', height: '10vh'}}>
+    <h5>Since you are interested in {this.state.companyInfo.companyName}({this.state.companyInfo.symbol}), You might also like...</h5>
+            </div>
+                Placeholder
             </div>
         )
     }

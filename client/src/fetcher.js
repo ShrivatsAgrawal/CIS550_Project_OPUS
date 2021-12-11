@@ -14,6 +14,13 @@ const getCompanyInfo = async (symbol) => {
     return res.json()
 }
 
+const getCompanyPeers = async (symbol) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/company/peers/${symbol}`, {
+        method: 'GET',
+    })
+    return res.json()
+}
+
 const getCompanyJobs = async (page, pagesize, symbol) => {
     var res = await fetch(`http://${config.server_host}:${config.server_port}/company/jobs/${symbol}?page=${page}&pagesize=${pagesize}`, {
         method: 'GET',
@@ -47,6 +54,7 @@ const getJobs = async (companyName, numEmployeesLow, numEmployeesHigh, industry,
 export {
     getCompanyNews,
     getCompanyInfo,
+    getCompanyPeers,
     getCompanyJobs,
     getCompanySentiment,
     getCompanies,

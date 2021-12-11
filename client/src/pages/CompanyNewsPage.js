@@ -6,12 +6,11 @@ import {
   Switch
 } from 'antd'
 
- import { Form, FormInput, FormGroup, Button, Card, CardBody, CardTitle, CardText, Progress ,CardImg, CardSubtitle} from "shards-react";
+ import { Card, CardBody, CardTitle, CardText, CardImg, CardSubtitle} from "shards-react";
 
  import { withRouter } from "react-router";
 import MenuBar from '../components/MenuBar';
 import { getCompanyNews } from '../fetcher'
-import { useParams } from 'react-router-dom';
 const { Column, ColumnGroup } = Table;
 const { Option } = Select;
 const numEachPage =4
@@ -57,8 +56,7 @@ peerOnChange(value) {
     
   if (value){
     this.setState({companyNewsResults : this.state.allNewsResults})
-  //console.log(`Something is executing ${value}`)
-            }
+  }
   else {
     this.setState( {companyNewsResults : this.state.allNewsResults.filter(item => item.cmpRel == "SELF")})
   }
@@ -67,8 +65,6 @@ peerOnChange(value) {
   componentDidMount() {
     
     getCompanyNews(this.state.companyNewsPageNumber, this.state.companyNewsPageSize,this.state.symbol).then(res => {
-      
-      console.log(res.results)
       this.setState({ companyNewsResults: res.results, allNewsResults : res.results})
       
 })
