@@ -11,6 +11,14 @@ import {
     Switch
 } from 'antd'
 
+import {
+    Navbar,
+    NavbarBrand,
+    Nav,
+    NavItem,
+    NavLink
+  } from "shards-react";
+
 import { withRouter } from "react-router";
 import { getJobs } from '../fetcher'
 
@@ -27,7 +35,7 @@ const jobColumns = [
       dataIndex: 'companyName',
       key: 'companyName',
       sorter: (a, b) => a.jobCompany.localeCompare(b.jobCompany),
-      render: (text, row) => <a href={`${row.companyLink}`} target={`_blank`}>{text}</a>
+      render: (text, row) => <a href={`${row.companyLink}`}>{text}</a>
   },
   {
     title: 'Number of Employees',
@@ -60,7 +68,7 @@ const jobColumns = [
     dataIndex: 'jobTitle',
     key: 'jobTitle',
     sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
-    render: (text, row) => <a href={`${row.jobLink}`} target={`_blank`}>{text}</a>
+    render: (text, row) => <a href={`${row.jobLink}`}>{text}</a>
     
   },
   {
@@ -79,7 +87,7 @@ const jobColumns = [
     title: 'More Jobs',
     dataIndex: 'searchLink',
     key: 'searchLink',
-    render: (text, row) => <a href={`${row.searchLink}` } target={`_blank`}>Link</a>
+    render: (text, row) => <a href={`${row.searchLink}`}>Link</a>
   },    
   ];
 
@@ -165,6 +173,21 @@ class JobSearch extends React.Component {
     render() {
         return (
             <div>
+            <Navbar type="dark" theme="primary" expand="md">
+              <NavbarBrand>CIS 550 OPUS</NavbarBrand>
+              <Nav navbar>
+                <NavItem>
+                  <NavLink active href="/">
+                    Search Companies
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink active href="/search/jobs/">
+                    Search Jobs
+                  </NavLink>
+                </NavItem>
+              </Nav>
+            </Navbar>
                 <Form style={{ width: '100vw', margin: '0 auto', marginTop: '5vh' }}>
                     <Row>
                         <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
