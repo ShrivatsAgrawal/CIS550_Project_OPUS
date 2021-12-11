@@ -155,6 +155,14 @@ class HomeCompanySearch extends React.Component {
                 </NavItem>
               </Nav>
             </Navbar>
+            <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '10vh'}}>
+    <h1> OPUS </h1>
+    
+                </div>
+                <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '0vh'}}>
+   
+    <h4>Helping Students Find Work</h4>
+                </div>
                 <Form style={{ width: '100vw', margin: '0 auto', marginTop: '5vh' }}>
                     <Row>
                         <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>

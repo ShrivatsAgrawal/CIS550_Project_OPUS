@@ -35,7 +35,7 @@ const jobColumns = [
       dataIndex: 'companyName',
       key: 'companyName',
       sorter: (a, b) => a.jobCompany.localeCompare(b.jobCompany),
-      render: (text, row) => <a href={`${row.companyLink}`}>{text}</a>
+      render: (text, row) => <a href={`${row.companyLink}`} target={`_blank`}>{text}</a>
   },
   {
     title: 'Number of Employees',
@@ -68,7 +68,7 @@ const jobColumns = [
     dataIndex: 'jobTitle',
     key: 'jobTitle',
     sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
-    render: (text, row) => <a href={`${row.jobLink}`}>{text}</a>
+    render: (text, row) => <a href={`${row.jobLink}` } target={`_blank`}>{text}</a>
     
   },
   {
@@ -87,7 +87,7 @@ const jobColumns = [
     title: 'More Jobs',
     dataIndex: 'searchLink',
     key: 'searchLink',
-    render: (text, row) => <a href={`${row.searchLink}`}>Link</a>
+    render: (text, row) => <a href={`${row.searchLink}` } target={`_blank`}>Link</a>
   },    
   ];
 
