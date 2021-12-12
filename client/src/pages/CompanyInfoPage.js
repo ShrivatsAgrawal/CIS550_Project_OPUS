@@ -10,7 +10,6 @@ import { getCompanyInfo, getCompanyPeers } from '../fetcher'
 import MenuBar from '../components/MenuBar';
 
 import Layout from '../components/layout'
-// import { Container } from 'shards-react';
 
 const Container = styled.div`
   max-width: 100%;
@@ -18,7 +17,8 @@ const Container = styled.div`
   @media only screen and (max-width: 768px) {
     max-width: 100%;
     font-size: 1.6rem;
-  }`
+  }
+`
 
 function ImageLoader(props) {
     return (
@@ -53,12 +53,9 @@ class CompanyInfoPage extends React.Component {
 
     render() {
         return (
-            <Layout>
+            <Layout symbol={this.props.match.params.symbol}>
                 <Container>
-            <MenuBar symbol={this.state.companyInfo.symbol}/>
-
-            {console.log(this)}
-            <Descriptions title="Company Information" bordered>
+                <Descriptions title="Company Information" bordered>
                 <Descriptions.Item label="Name">{this.state.companyInfo.companyName}</Descriptions.Item>
                 <Descriptions.Item label="Logo"><ImageLoader image={this.state.companyInfo.image}/></Descriptions.Item>
                 <Descriptions.Item label="Country">{this.state.companyInfo.country}</Descriptions.Item>

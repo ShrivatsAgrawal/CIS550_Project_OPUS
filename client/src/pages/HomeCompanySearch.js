@@ -154,7 +154,6 @@ class HomeCompanySearch extends React.Component {
         return (
             <Layout>
             <Container style={{ color: 'inherit' }}>
-                <div></div>
                 <Form style={{ color: 'inherit', fontSize: '1rem', maxWidth: '100%', margin: '0 auto', marginTop: '5vh' }}>
                     <Row>
                         <Col flex={2}><FormGroup style={{color: 'inherit', maxWidth: '90%', margin: '0 auto' }}>

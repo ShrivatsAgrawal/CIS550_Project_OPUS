@@ -1,4 +1,6 @@
 import React from 'react';
+import styled from 'styled-components'
+
 import {
   Table,
   Pagination,
@@ -11,6 +13,18 @@ import {
  import { withRouter } from "react-router";
 import MenuBar from '../components/MenuBar';
 import { getCompanyNews } from '../fetcher'
+
+import Layout from '../components/layout'
+
+const Container = styled.div`
+  max-width: 100%;
+  font-size: 2rem;
+  @media only screen and (max-width: 768px) {
+    max-width: 100%;
+    font-size: 1.6rem;
+  }
+`
+
 const { Column, ColumnGroup } = Table;
 const { Option } = Select;
 const numEachPage =4
@@ -74,11 +88,11 @@ peerOnChange(value) {
   render() {
 
     return (
-      <div>  
-       <MenuBar symbol={this.state.symbol}/>      
+      <Layout symbol={this.props.match.params.symbol}>  
+       <Container>
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
-          <h3>News</h3>
-          <h5>News by Peers <Switch checkedChildren="On" unCheckedChildren="Off" defaultChecked onChange={this.peerOnChange} /></h5>
+          News
+          <h5 style={{color: 'inherit'}}>News by Peers <Switch checkedChildren="On" unCheckedChildren="Off" defaultChecked onChange={this.peerOnChange} /></h5>
   
           {this.state.companyNewsResults &&
           this.state.companyNewsResults.length > 0 &&
@@ -116,7 +130,8 @@ peerOnChange(value) {
                
 
           </div>
-      </div>
+          </Container>
+      </Layout>
     )
   }
 

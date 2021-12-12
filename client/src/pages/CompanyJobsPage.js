@@ -1,4 +1,6 @@
 import React from 'react';
+import styled from 'styled-components'
+
 import {
   Table,
   Select,
@@ -8,8 +10,21 @@ import {
 import MenuBar from '../components/MenuBar';
 import { getCompanyJobs } from '../fetcher'
 import { withRouter } from "react-router";
+
+import Layout from '../components/layout'
+
+const Container = styled.div`
+  max-width: 100%;
+  font-size: 2rem;
+  @media only screen and (max-width: 768px) {
+    max-width: 100%;
+    font-size: 1.6rem;
+  }
+`
+
 const { Column, ColumnGroup } = Table;
 const { Option } = Select;
+
 
 
 const companyJobColumns = [
@@ -133,15 +148,16 @@ class CompanyJobsPage extends React.Component {
   render() {
 
     return (
-      <div>
-       <MenuBar symbol={this.state.symbol}/>
-       <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
-          <h3>Jobs by {this.state.symbol}</h3> 
+      <Layout symbol={this.props.match.params.symbol}>
+        <Container>
+          <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
+          Jobs by {this.state.symbol} 
           <br />
-          <h5>Similar Jobs Recommendation <Switch checkedChildren="On" unCheckedChildren="Off" defaultChecked onChange={this.peerOnChange} /></h5>
+          <h5 style={{color: 'inherit'}}>Similar Jobs Recommendation <Switch checkedChildren="On" unCheckedChildren="Off" defaultChecked onChange={this.peerOnChange} /></h5>
           <Table dataSource={this.state.companyJobResults} columns={companyJobColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
         </div>
-      </div>
+        </Container>
+        </Layout>
     )
   }
 

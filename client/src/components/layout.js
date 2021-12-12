@@ -28,9 +28,10 @@ const Content = styled.div`
   }
 `
 
-const Layout = ({ children }) => {
+const Layout = ({ symbol, children }) => {
   const [isDark, setIsDark] = useState(false)
-  const symbol = children.props.children[0].props.symbol ? children.props.children[0].props.symbol : null
+  console.log(children)
+  // const symbol = children.props.children[0].props.symbol ? children.props.children[0].props.symbol : null
 
   return (
     <ThemeProvider theme={isDark ? darkTheme : lightTheme}>

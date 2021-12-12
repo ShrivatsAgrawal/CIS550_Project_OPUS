@@ -1,4 +1,5 @@
 import React from 'react';
+import styled, {ThemeContext} from 'styled-components'
 
 import { Form, FormInput, FormGroup, Button } from "shards-react";
 
@@ -21,6 +22,17 @@ import {
 
 import { withRouter } from "react-router";
 import { getJobs } from '../fetcher'
+
+import Layout from '../components/layout'
+
+const Container = styled.div`
+  max-width: 100%;
+  font-size: 2rem;
+  @media only screen and (max-width: 768px) {
+    max-width: 100%;
+    font-size: 1.6rem;
+  }
+`
 
 const jobColumns = [
     {
@@ -172,66 +184,53 @@ class JobSearch extends React.Component {
 
     render() {
         return (
-            <div>
-            <Navbar type="dark" theme="primary" expand="md">
-              <NavbarBrand>CIS 550 OPUS</NavbarBrand>
-              <Nav navbar>
-                <NavItem>
-                  <NavLink active href="/">
-                    Search Companies
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink active href="/search/jobs/">
-                    Search Jobs
-                  </NavLink>
-                </NavItem>
-              </Nav>
-            </Navbar>
-                <Form style={{ width: '100vw', margin: '0 auto', marginTop: '5vh' }}>
+            <Layout>
+                <Container>
+                <Form style={{ maxWidth: '100%', margin: '0 auto', marginTop: '5vh' }}>
                     <Row>
-                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
+                        <Col flex={2}><FormGroup style={{ maxWidth: '90%', margin: '0 auto' }}>
                             <label>Name</label>
                             <FormInput placeholder="Apple or probably Guava?" value={this.state.nameQuery} onChange={this.handleNameQueryChange} />
                         </FormGroup></Col>
-                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
+                        <Col flex={2}><FormGroup style={{ maxWidth: '90%', margin: '0 auto' }}>
                             <label>Industry</label>
                             <FormInput placeholder="Electronics?" value={this.state.industryQuery} onChange={this.handleIndustryQueryChange} />
                         </FormGroup></Col>
-                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
+                        <Col flex={2}><FormGroup style={{ maxWidth: '90%', margin: '0 auto' }}>
                             <label>Sector</label>
                             <FormInput placeholder="Tech?" value={this.state.sectorQuery} onChange={this.handleSectorQueryChange} />
                         </FormGroup></Col>
-                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
+                        <Col flex={2}><FormGroup style={{ maxWidth: '90%', margin: '0 auto' }}>
                             <label>Job Title</label>
                             <FormInput placeholder="Looking for something fancy?" value={this.state.jobTitleQuery} onChange={this.handleJobTitleQueryChange} />
                         </FormGroup></Col>
                     </Row>
                     <br></br>
                     <Row>
-                        <Col offset={2} flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
+                        <Col offset={2} flex={2}><FormGroup style={{ maxWidth: '90%', margin: '0 auto' }}>
                             <label>Rating ⭐</label>
                             <Slider range min={0} max={5} step={0.1} defaultValue={[0, 5]} onChange={this.handleRatingChange} />
                         </FormGroup></Col>
-                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
-                            <label>Minimum Employees</label>
+                        <Col flex={2}><FormGroup style={{ maxWidth: '90%', margin: '0 auto' }}>
+                            <label>Min Employees</label>
                             <FormInput placeholder="0? Even a startup will have 1!" value={this.state.employeeLowQuery} onChange={this.handleEmployeeMinChange} />
                         </FormGroup></Col>
-                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
-                            <label>Maximum Employees</label>
+                        <Col flex={2}><FormGroup style={{ maxWidth: '90%', margin: '0 auto' }}>
+                            <label>Max Employees</label>
                             <FormInput placeholder="A relatively high number!" value={this.state.employeeHighQuery} onChange={this.handleEmployeeMaxChange} />
                         </FormGroup></Col>
-                        <Col flex={2}><FormGroup style={{ width: '10vw' }}>
+                        <Col flex={2}><FormGroup style={{ maxWidth: '20%' }}>
                         <Switch style={{ marginLeft: '6vh', marginTop: '5vh' }} checkedChildren="NRML" unCheckedChildren="Intern" defaultChecked onChange={this.handleJobTypeChange} />
                         </FormGroup></Col>
-                        <Col flex={2}><FormGroup style={{ width: '10vw' }}>
+                        <Col flex={2}><FormGroup style={{ maxWidth: '20%' }}>
                             <Button style={{ marginTop: '4vh' }} onClick={this.updateSearchResults}>Search</Button>
                         </FormGroup></Col>
                     </Row>
                     <Divider />
                     <Table dataSource={this.state.jobsResults} columns={jobColumns} pagination={{ pageSizeOptions:[10, 50], defaultPageSize: 10, showQuickJumper:true }} style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}/>
                 </Form>
-            </div>
+            </Container>
+            </Layout>
         )
     }
 }

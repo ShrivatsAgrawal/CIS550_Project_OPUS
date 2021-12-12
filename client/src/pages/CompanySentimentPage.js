@@ -1,5 +1,7 @@
 
 import React from 'react';
+import styled from 'styled-components'
+
 import {
   Table,
   Select,
@@ -10,6 +12,18 @@ import {
 import MenuBar from '../components/MenuBar';
 import { getCompanySentiment } from '../fetcher'
 import { withRouter } from "react-router";
+
+import Layout from '../components/layout'
+
+const Container = styled.div`
+  max-width: 100%;
+  font-size: 2rem;
+  @media only screen and (max-width: 768px) {
+    max-width: 100%;
+    font-size: 1.6rem;
+  }
+`
+
 const { Column, ColumnGroup } = Table;
 const { Option } = Select;
 
@@ -78,19 +92,20 @@ class CompanySentimentPage extends React.Component {
   render() {
 
     return (
-      <div>
-      <MenuBar symbol={this.state.symbol}/>
+      <Layout symbol={this.props.match.params.symbol}>
+        <Container>
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
-          <Divider>Company Sentiment for {this.state.companyName}</Divider>
+          <Divider style={{color: 'inherit'}}>Company Sentiment for {this.state.companyName}</Divider>
           <p>Sentiment: what people think of this company<Progress percent={Math.trunc(this.state.companySentimentResults * 100)}/></p>
           <p>Popularity: how much people talk about this company<Progress percent={Math.trunc(this.state.companyIndex * 100)}/></p>
-          <Divider>Peer Sentiment</Divider>
+          <Divider style={{color: 'inherit'}}>Peer Sentiment</Divider>
           <p>Average Sentiment of Peers <Progress percent = {Math.trunc(this.state.avgPeerSentiment*100)}/></p>
           <p>Average Popularity of Peers <Progress percent = {Math.trunc(this.state.avgPeerIndex*100)}/></p>
-          <h5>Peers</h5>
+          <h5 style={{color: 'inherit'}}>Peers</h5>
           <Table dataSource={this.state.peerSentimentResults} columns={companySentimentColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
         </div>
-      </div>
+        </Container>
+      </Layout>
     )
   }
 
