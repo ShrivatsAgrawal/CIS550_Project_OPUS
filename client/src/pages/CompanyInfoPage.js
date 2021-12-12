@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components'
 
+import {NavLink} from 'react-router-dom'
+
 import {
     Image, Descriptions, Badge, Progress
 } from 'antd'
@@ -17,6 +19,22 @@ const Container = styled.div`
   @media only screen and (max-width: 768px) {
     max-width: 100%;
     font-size: 1.6rem;
+  }
+`
+
+const LinksItem = styled.li`
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+  margin-left: 25px;
+  cursor: pointer;
+  align-items: center;
+  color: ${props => props.theme.colors.textColor};
+  user-select: none;
+  font-size: 1.2rem;
+  transition: all 0.3s ease-out;
+  &:hover {
+    opacity: 0.7;
   }
 `
 
@@ -47,7 +65,7 @@ class CompanyInfoPage extends React.Component {
         })
 
         getCompanyPeers(symbol).then(res => {
-            this.setState({ companyPeers: res.results[0] })
+            this.setState({ companyPeers: res.results })
         })
     }
 
@@ -55,7 +73,7 @@ class CompanyInfoPage extends React.Component {
         return (
             <Layout symbol={this.props.match.params.symbol}>
                 <Container>
-                <Descriptions title="Company Information" bordered>
+                <Descriptions title="Company Information" bordered style={{color: 'inherit'}}>
                 <Descriptions.Item label="Name">{this.state.companyInfo.companyName}</Descriptions.Item>
                 <Descriptions.Item label="Logo"><ImageLoader image={this.state.companyInfo.image}/></Descriptions.Item>
                 <Descriptions.Item label="Country">{this.state.companyInfo.country}</Descriptions.Item>
@@ -102,12 +120,7 @@ class CompanyInfoPage extends React.Component {
             <Descriptions title="Official Description of the Company">
                 <Descriptions.Item>{this.state.companyInfo.description}</Descriptions.Item>
             </Descriptions>
-            <br/>
-            <div style={{display: 'flex',  justifyContent:'left', alignItems:'center', height: '10vh'}}>
-    <h5>Since you are interested in {this.state.companyInfo.companyName}({this.state.companyInfo.symbol}), You might also like...</h5>
-            </div>
-                Placeholder
-                </Container>
+            </Container>
             </Layout>
         )
     }
