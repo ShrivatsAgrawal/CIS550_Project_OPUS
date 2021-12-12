@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import styled, {ThemeContext} from 'styled-components'
 
 import { Form, FormInput, FormGroup, Button } from "shards-react";
 
 import {
     Table,
     Row,
+    Image,
     Col,
     Divider,
     Slider
@@ -20,6 +22,17 @@ import {
   
 import { withRouter } from "react-router";
 import { getCompanies } from '../fetcher'
+
+import Layout from '../components/layout'
+
+const Container = styled.div`
+  max-width: 100%;
+  font-size: 2rem;
+  @media only screen and (max-width: 768px) {
+    max-width: 100%;
+    font-size: 1.6rem;
+  }
+`
 
 const companyColumns = [
     {
@@ -129,7 +142,7 @@ class HomeCompanySearch extends React.Component {
         getCompanies(this.state.nameQuery, this.state.employeeLowQuery, this.state.employeeHighQuery, this.state.mktcapLowQuery, this.state.mktcapHighQuery, this.state.sentiLowQuery, this.state.sentiHighQuery, this.state.jobNumQuery).then(res => {
             this.setState({ companiesResults: res.results })
         })
-    }
+    }    
 
     componentDidMount() {
         getCompanies(this.state.nameQuery, this.state.employeeLowQuery, this.state.employeeHighQuery, this.state.mktcapLowQuery, this.state.mktcapHighQuery, this.state.sentiLowQuery, this.state.sentiHighQuery, this.state.jobNumQuery).then(res => {
@@ -139,71 +152,51 @@ class HomeCompanySearch extends React.Component {
 
     render() {
         return (
-            <div>
-            <Navbar type="dark" theme="primary" expand="md">
-              <NavbarBrand>CIS 550 OPUS</NavbarBrand>
-              <Nav navbar>
-                <NavItem>
-                  <NavLink active href="/">
-                    Search Companies
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink active href="/search/jobs/">
-                    Search Jobs
-                  </NavLink>
-                </NavItem>
-              </Nav>
-            </Navbar>
-            <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '10vh'}}>
-    <h1> OPUS </h1>
-    
-                </div>
-                <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '0vh'}}>
-   
-    <h4>Helping Students Find Work</h4>
-                </div>
-                <Form style={{ width: '100vw', margin: '0 auto', marginTop: '5vh' }}>
+            <Layout>
+            <Container style={{ color: 'inherit' }}>
+                <div></div>
+                <Form style={{ color: 'inherit', fontSize: '1rem', maxWidth: '100%', margin: '0 auto', marginTop: '5vh' }}>
                     <Row>
-                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
+                        <Col flex={2}><FormGroup style={{color: 'inherit', maxWidth: '90%', margin: '0 auto' }}>
                             <label>Name</label>
-                            <FormInput placeholder="Apple or probably Guava?" value={this.state.nameQuery} onChange={this.handleNameQueryChange} />
+                            <FormInput placeholder="Apple or try Guava?" value={this.state.nameQuery} onChange={this.handleNameQueryChange} />
                         </FormGroup></Col>
-                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
-                            <label>Minimum Number of Jobs</label>
+                        <Col flex={2}><FormGroup style={{ maxWidth: '90%', margin: '0 auto' }}>
+                            <label>Min Jobs</label>
                             <FormInput placeholder="0? Already Employed? Party!" value={this.state.jobNumQuery} onChange={this.handleJobNumChange} />
                         </FormGroup></Col>
-                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
-                            <label>Minimum Employees</label>
+                        <Col flex={2}><FormGroup style={{ maxWidth: '90%', margin: '0 auto' }}>
+                            <label>Min Employees</label>
                             <FormInput placeholder="0? Even a startup will have 1!" value={this.state.employeeLowQuery} onChange={this.handleEmployeeMinChange} />
                         </FormGroup></Col>
-                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
-                            <label>Maximum Employees</label>
+                        <Col flex={2}><FormGroup style={{ maxWidth: '90%', margin: '0 auto' }}>
+                            <label>Max Employees</label>
                             <FormInput placeholder="A relatively high number!" value={this.state.employeeHighQuery} onChange={this.handleEmployeeMaxChange} />
                         </FormGroup></Col>
                     </Row>
                     <br></br>
                     <Row>
-                        <Col offset={2} flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
+                        <Col offset={2} flex={2}><FormGroup style={{ maxWidth: '100%', margin: '0 auto' }}>
                             <label>Sentiment</label>
                             <Slider range min={0} max={1} step={0.01} defaultValue={[0, 1]} onChange={this.handleSentimentChange} />
                         </FormGroup></Col>
-                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
-                            <label>Minimum Market Cap</label>
+                        <Col flex={2}><FormGroup style={{ maxWidth: '75%', margin: '0 auto' }}>
+                            <label>Min Market Cap</label>
                             <FormInput placeholder="Is 0 even possible?" value={this.state.mktcapLowQuery} onChange={this.handleMktcapMinChange} />
                         </FormGroup></Col>
-                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
-                            <label>Maximum Market Cap</label>
+                        <Col flex={2}><FormGroup style={{ maxWidth: '75%', margin: '0 auto' }}>
+                            <label>Max Market Cap</label>
                             <FormInput placeholder="A very very high number!" value={this.state.mktcapHighQuery} onChange={this.handleMktcapMaxChange} />
                         </FormGroup></Col>
-                        <Col flex={2}><FormGroup style={{ width: '10vw' }}>
+                        <Col flex={2}><FormGroup style={{ maxWidth: '25%', margin: '0 auto'}}>
                             <Button style={{ marginTop: '4vh' }} onClick={this.updateSearchResults}>Search</Button>
                         </FormGroup></Col>
                     </Row>
                     <Divider />
-                    <Table dataSource={this.state.companiesResults} columns={companyColumns} pagination={{ pageSizeOptions:[10, 50], defaultPageSize: 10, showQuickJumper:true }} style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}/>
+                    <Table dataSource={this.state.companiesResults} columns={companyColumns} pagination={{ pageSizeOptions:[10, 50], defaultPageSize: 10, showQuickJumper:true }} style={{ maxWidth: '100%', color: 'inherit', margin: '0 auto', marginTop: '2vh' }}/>
                 </Form>
-            </div>
+                </Container>
+            </Layout>
         )
     }
 }

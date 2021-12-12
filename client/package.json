@@ -17,7 +17,8 @@
     "react-vis": "^1.11.7",
     "reactstrap": "^9.0.1",
     "shards-react": "^1.0.3",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "^1.1.2",
+    "styled-components": "^4.4.1"
   },
   "scripts": {
     "start": "react-scripts start",

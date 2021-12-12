@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components'
 
 import {
     Image, Descriptions, Badge, Progress
@@ -8,6 +9,16 @@ import { withRouter } from "react-router";
 import { getCompanyInfo, getCompanyPeers } from '../fetcher'
 import MenuBar from '../components/MenuBar';
 
+import Layout from '../components/layout'
+// import { Container } from 'shards-react';
+
+const Container = styled.div`
+  max-width: 100%;
+  font-size: 2rem;
+  @media only screen and (max-width: 768px) {
+    max-width: 100%;
+    font-size: 1.6rem;
+  }`
 
 function ImageLoader(props) {
     return (
@@ -42,8 +53,11 @@ class CompanyInfoPage extends React.Component {
 
     render() {
         return (
-            <div>
+            <Layout>
+                <Container>
             <MenuBar symbol={this.state.companyInfo.symbol}/>
+
+            {console.log(this)}
             <Descriptions title="Company Information" bordered>
                 <Descriptions.Item label="Name">{this.state.companyInfo.companyName}</Descriptions.Item>
                 <Descriptions.Item label="Logo"><ImageLoader image={this.state.companyInfo.image}/></Descriptions.Item>
@@ -96,7 +110,8 @@ class CompanyInfoPage extends React.Component {
     <h5>Since you are interested in {this.state.companyInfo.companyName}({this.state.companyInfo.symbol}), You might also like...</h5>
             </div>
                 Placeholder
-            </div>
+                </Container>
+            </Layout>
         )
     }
 }
