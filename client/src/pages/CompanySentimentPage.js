@@ -50,13 +50,13 @@ const companySentimentColumns = [
     render: (text, row) => <p><Progress percent = {Math.trunc(row.sentiment*100)}/></p>
     
 },
-{
+/*{
     title: 'Popularity',
     dataIndex: 'absoluteIndex',
     key: 'absoluteIndex',
     sorter: (a, b) => a.absoluteIndex - b.absoluteIndex,
     render: (text, row) => <p><Progress size = 'small' percent = {Math.trunc(row.absoluteIndex*100)}/></p>    
-}
+}*/
 ];
 
 class CompanySentimentPage extends React.Component {
@@ -97,10 +97,10 @@ class CompanySentimentPage extends React.Component {
        <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
           <Divider style={{color: 'inherit'}}>Company Sentiment for {this.state.companyName}</Divider>
           <p>Sentiment: what people think of this company<Progress percent={Math.trunc(this.state.companySentimentResults * 100)}/></p>
-          <p>Popularity: how much people talk about this company<Progress percent={Math.trunc(this.state.companyIndex * 100)}/></p>
+          {/*<p>Popularity: how much people talk about this company<Progress percent={Math.trunc(this.state.companyIndex * 100)}/></p>*/}
           <Divider style={{color: 'inherit'}}>Peer Sentiment</Divider>
           <p>Average Sentiment of Peers <Progress percent = {Math.trunc(this.state.avgPeerSentiment*100)}/></p>
-          <p>Average Popularity of Peers <Progress percent = {Math.trunc(this.state.avgPeerIndex*100)}/></p>
+          {/*<p>Average Popularity of Peers <Progress percent = {Math.trunc(this.state.avgPeerIndex*100)}/></p>*/}
           <h5 style={{color: 'inherit'}}>Peers</h5>
           <Table dataSource={this.state.peerSentimentResults} columns={companySentimentColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
         </div>
