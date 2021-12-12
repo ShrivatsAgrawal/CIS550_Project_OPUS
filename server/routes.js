@@ -85,14 +85,14 @@ async function company_sentiment(req, res) {
         FROM T2 UNION ALL
         SELECT *
         FROM T3),
-        T4 AS (SELECT S.sentiment, S.relativeIndex, T1.ID
+        T4 AS (SELECT S.sentiment, S.absoluteIndex, T1.ID
         FROM CompanySentiments S JOIN T1 ON S.symbol = T1.ID),
-        T5 AS (SELECT 'Average of peers' AS companyName, 'AVG' AS symbol, AVG(S.sentiment) as sentiment, AVG(S.absoluteIndex) as relativeIndex, 1 as ord
+        T5 AS (SELECT 'Average of peers' AS companyName, 'AVG' AS symbol, AVG(S.sentiment) as sentiment, AVG(S.absoluteIndex) as absoluteIndex, 1 as ord
         FROM CompanySentiments S JOIN T1 ON S.symbol = T1.ID
         WHERE T1.ID != '${company}')
         SELECT * FROM T5
         UNION ALL
-        SELECT T23.companyName, T23.symbol, T4.sentiment, T4.relativeIndex, T23.ord
+        SELECT T23.companyName, T23.symbol, T4.sentiment, T4.absoluteIndex, T23.ord
         FROM T23 JOIN T4 ON T23.ID = T4.ID
         ORDER BY ord;`, function (error, results, fields) {
             if (error) {
