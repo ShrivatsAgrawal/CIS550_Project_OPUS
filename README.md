@@ -31,3 +31,6 @@ OPUS is designed to help find students relevant job and internship opportunities
     `npm start`
 4. This should automatically open the application in your browser, if not copy-paste the link displayed in the client terminal into your browser.
 5. Voila! OPUS is now running!
+
+## Video Demo
+[Link](https://drive.google.com/file/d/1lMf-ad38YJYeCSwhKaL8G-JbZbvN_Aax/view?usp=sharing) to the video demo of the project.
