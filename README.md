@@ -66,8 +66,8 @@ Don't forget to give the project a star! Thanks again!
 
 Shrivats Agrawal - <a href='https://www.linkedin.com/in/shrivats-agrawal/'> LinkedIn </a> - shriv9@seas.upenn.edu <br>
 Abhinav Atrishi - <a href='https://www.linkedin.com/in/abhinav-atrishi/'>LinkedIn</a> - abhinav1@seas.upenn.edu <br>
-Bushra Kidwai - <a href='https://www.linkedin.com/in/bushra-kidwai-772b9b15b/'>LinkedIn</a>
-Samuel Kamien 
+Bushra Kidwai - <a href='https://www.linkedin.com/in/bushra-kidwai-772b9b15b/'>LinkedIn</a> - bkidwai@seas.upenn.edu <br>
+Samuel Kamien - skamien@seas.upenn.edu <br>
 
 Project Link: [https://github.com/ShrivatsAgrawal/CIS550_Project_OPUS/](https://github.com/ShrivatsAgrawal/CIS550_Project_OPUS/)<br>
 
